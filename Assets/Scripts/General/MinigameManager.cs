@@ -17,8 +17,11 @@ public class MinigameManager : MonoBehaviour
     private bool isMinigameActive = false;
 
     // 0 = Carving, 1 = MetalPour, 2 = Painting
-    private int currentStep = 0;
-    public int CurrentStep => currentStep; // public getter
+    public int CurrentStep { get; private set; } = 0;
+
+    private string usedWood;
+    private string usedMetal;
+    private string usedFlower;
 
     void Awake()
     {
@@ -35,15 +38,15 @@ public class MinigameManager : MonoBehaviour
     {
         if (isMinigameActive) return;
 
-        // Sprawdzenie kolejności
-        if ((name == "MetalPour" && currentStep < 1) ||
-            (name == "MaskPainting" && currentStep < 2))
+        // Kolejność
+        if ((name == "MetalPour" && CurrentStep < 1) ||
+            (name == "MaskPainting" && CurrentStep < 2))
         {
             Debug.LogWarning("Musisz wykonać poprzednią minigrę!");
             return;
         }
 
-        // Sprawdzenie zasobów
+        // Zasoby
         if (!HasRequiredResource(name))
         {
             Debug.LogWarning($"Nie masz wymaganych zasobów do {name}");
@@ -58,28 +61,29 @@ public class MinigameManager : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
-        if (minigameCanvas != null)
-            minigameCanvas.SetActive(true);
-
+        minigameCanvas.SetActive(true);
         DisableAllMinigames();
 
         switch (name)
         {
             case "Carving":
+                usedWood = GetResourceForMinigame(name);
                 carvingMinigame.gameObject.SetActive(true);
-                carvingMinigame.SetResource(GetResourceForMinigame(name));
+                carvingMinigame.SetResource(usedWood);
                 carvingMinigame.InitializeMinigame();
                 break;
 
             case "MetalPour":
+                usedMetal = GetResourceForMinigame(name);
                 metalPourMinigame.gameObject.SetActive(true);
-                metalPourMinigame.SetResource(GetResourceForMinigame(name));
+                metalPourMinigame.SetResource(usedMetal);
                 metalPourMinigame.InitializeMinigame();
                 break;
 
             case "MaskPainting":
+                usedFlower = GetResourceForMinigame(name);
                 maskPaintingMinigame.gameObject.SetActive(true);
-                maskPaintingMinigame.SetResource(GetResourceForMinigame(name));
+                maskPaintingMinigame.SetResource(usedFlower);
                 maskPaintingMinigame.InitializeMinigame();
                 break;
         }
@@ -97,11 +101,29 @@ public class MinigameManager : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        if (minigameCanvas != null)
-            minigameCanvas.SetActive(false);
-
+        minigameCanvas.SetActive(false);
         DisableAllMinigames();
-        currentStep++; // po ukończeniu minigry przechodzimy do kolejnego kroku
+
+        CurrentStep++;
+
+        // JEŚLI skończyliśmy painting → zamykamy cały loop
+        if (CurrentStep > 2)
+            FinishCraftingLoop();
+    }
+
+    void FinishCraftingLoop()
+    {
+        Debug.Log("🎭 Mask completed! Consuming resources & resetting loop.");
+
+        Inventory.instance.ConsumeResource(usedWood);
+        Inventory.instance.ConsumeResource(usedMetal);
+        Inventory.instance.ConsumeResource(usedFlower);
+
+        usedWood = null;
+        usedMetal = null;
+        usedFlower = null;
+
+        CurrentStep = 0;
     }
 
     void DisableAllMinigames()
@@ -111,24 +133,9 @@ public class MinigameManager : MonoBehaviour
         maskPaintingMinigame.gameObject.SetActive(false);
     }
 
-    // ================= painting hook =================
-    public void OnPaintingFinished(PaintingTable table)
-    {
-        StartCoroutine(ReenableTableNextFrame(table));
-    }
+    public bool IsMinigameActive() => isMinigameActive;
 
-    private IEnumerator ReenableTableNextFrame(PaintingTable table)
-    {
-        yield return null; // 1 frame opóźnienia
-        table.gameObject.SetActive(true);
-    }
-
-    public bool IsMinigameActive()
-    {
-        return isMinigameActive;
-    }
-
-    // ================= Zasoby =================
+    // ================= ZASOBY =================
     public bool HasRequiredResource(string minigame)
     {
         switch (minigame)
@@ -137,10 +144,12 @@ public class MinigameManager : MonoBehaviour
                 return Inventory.instance.GetResources("acacia") > 0 ||
                        Inventory.instance.GetResources("willow") > 0 ||
                        Inventory.instance.GetResources("palm") > 0;
+
             case "MetalPour":
                 return Inventory.instance.GetResources("iron") > 0 ||
                        Inventory.instance.GetResources("gold") > 0 ||
                        Inventory.instance.GetResources("copper") > 0;
+
             case "MaskPainting":
                 return Inventory.instance.GetResources("poppy") > 0 ||
                        Inventory.instance.GetResources("violet") > 0 ||
@@ -157,26 +166,17 @@ public class MinigameManager : MonoBehaviour
                 if (Inventory.instance.GetResources("acacia") > 0) return "acacia";
                 if (Inventory.instance.GetResources("willow") > 0) return "willow";
                 return "palm";
+
             case "MetalPour":
                 if (Inventory.instance.GetResources("iron") > 0) return "iron";
                 if (Inventory.instance.GetResources("gold") > 0) return "gold";
                 return "copper";
+
             case "MaskPainting":
                 if (Inventory.instance.GetResources("poppy") > 0) return "poppy";
                 if (Inventory.instance.GetResources("violet") > 0) return "violet";
                 return "chrysanthemum";
         }
         return null;
-    }
-
-    // ================= PUBLIC WRAPPERS dla PaintingTable =================
-    public bool CanStartPainting()
-    {
-        return currentStep >= 2 && HasRequiredResource("MaskPainting");
-    }
-
-    public string GetAvailableFlower()
-    {
-        return GetResourceForMinigame("MaskPainting");
     }
 }

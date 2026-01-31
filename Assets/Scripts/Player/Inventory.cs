@@ -30,5 +30,14 @@ public class Inventory : MonoBehaviour
 
         return default;
     }
+    public void ConsumeResource(string resourceType, int amount = 1)
+    {
+        if (!resources.ContainsKey(resourceType)) return;
+
+        resources[resourceType] -= amount;
+        if (resources[resourceType] < 0)
+            resources[resourceType] = 0;
+    }
+
 
 }

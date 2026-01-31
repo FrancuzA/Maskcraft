@@ -9,6 +9,7 @@ public class CarvingMinigame : MonoBehaviour
     public Texture2D maskReferenceAkacja;
     public Texture2D maskReferenceWierzba;
     public Texture2D maskReferencePalma;
+    public RawImage maskGuide;
     public TMP_Text similarityText;
 
     [Header("Gameplay")]
@@ -26,11 +27,23 @@ public class CarvingMinigame : MonoBehaviour
     {
         switch (resource)
         {
-            case "acacia": maskReference = maskReferenceAkacja; break;
-            case "willow": maskReference = maskReferenceWierzba; break;
-            case "palm": maskReference = maskReferencePalma; break;
+            case "acacia":
+                maskReference = maskReferenceAkacja;
+                maskGuide.texture = maskReferenceAkacja;
+                break;
+
+            case "willow":
+                maskReference = maskReferenceWierzba;
+                maskGuide.texture = maskReferenceWierzba;
+                break;
+
+            case "palm":
+                maskReference = maskReferencePalma;
+                maskGuide.texture = maskReferencePalma;
+                break;
         }
     }
+
 
     private Texture2D maskReference;
 

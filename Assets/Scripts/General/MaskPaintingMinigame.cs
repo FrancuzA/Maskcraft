@@ -22,18 +22,13 @@ public class MaskPaintingMinigame : MonoBehaviour
     // ================= INIT =================
     public void SetResource(string flower)
     {
-        switch (flower)
-        {
-            case "Roza": flowerColor = Color.red; break;
-            case "Fiolka": flowerColor = Color.magenta; break;
-            case "Slonecznik": flowerColor = Color.yellow; break;
-        }
-
+        // ustawiamy kolor wszystkich punktów w zależności od kwiatu
         foreach (var p in points)
         {
-            p.paintColor = flowerColor;
+            p.SetFlowerColor(flower); // <- teraz ustawiamy publiczną metodą
         }
     }
+
 
     public void InitializeMinigame()
     {
