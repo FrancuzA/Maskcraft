@@ -2235,7 +2235,7 @@ PrefabInstance:
     - target: {fileID: 5474648257775801388, guid: 8251b8636e7604a4eab91bc89268bac4, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 8433c7a6312fb37438f5fb25a6911157, type: 2}
+      objectReference: {fileID: 2100000, guid: 5d8af8f434f69794eabd684fb44b4fbf, type: 2}
     - target: {fileID: 6682917710152808048, guid: 8251b8636e7604a4eab91bc89268bac4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -500
@@ -3198,6 +3198,7 @@ MonoBehaviour:
   - {fileID: 7866972198936585379, guid: 282412e89cd0ce043b2b24998486b224, type: 3}
   - {fileID: 8659917008774370469, guid: 8b53a473eace8be468b9000c7994f6d2, type: 3}
   - {fileID: 5493417204021383436, guid: 2621ff1bf3f2eec41b758a67d4a90ce2, type: 3}
+  timerAmount: 1
   isSpawning: 0
 --- !u!114 &2042552580
 MonoBehaviour:
