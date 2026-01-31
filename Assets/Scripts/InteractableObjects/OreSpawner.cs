@@ -9,11 +9,17 @@ public class OreSpawner : MonoBehaviour
     public List<String> oreToSpawn = new List<String>();
     public List<GameObject> spawnPoints = new List<GameObject>();
     public List<GameObject> oreTypes; // copper iron gold
+    public int timerAmount = 1;
     public bool isSpawning = false;
 
     private void Awake()
     {
         Dependencies.Instance.RegisterDependency<OreSpawner>(this);
+    }
+
+    private void Start()
+    {
+        TryToSpawn();
     }
 
     public void AddToQueue(string oreType)
@@ -28,28 +34,29 @@ public class OreSpawner : MonoBehaviour
             switch (oreToSpawn[0])
             {
                 case "copper":
-                    Timer(oreTypes[0]);
+                    StartCoroutine(Timer(oreTypes[0]));
                     break;
                 case "iron":
-                    Timer(oreTypes[1]);
+                    StartCoroutine(Timer(oreTypes[1]));
                     break;
                 case "gold":
-                    Timer(oreTypes[2]);
+                    StartCoroutine(Timer(oreTypes[2]));
                     break;
             }
         }
     }
     private IEnumerator Timer(GameObject ore)
     {
+        oreToSpawn.RemoveAt(0);
         isSpawning = true;
-        yield return new WaitForSecondsRealtime(50);
+        yield return new WaitForSecondsRealtime(timerAmount);
         GameObject spawnPoint = GetSpawnPoint();
         Spawn(spawnPoint.transform,ore);
     }
 
     private void Spawn(Transform parent, GameObject ore)
     {
-        Instantiate(ore, parent.position, Quaternion.identity, parent);
+        Instantiate(ore, parent.position, parent.transform.rotation, parent);
         isSpawning = false; 
         TryToSpawn();
     }
