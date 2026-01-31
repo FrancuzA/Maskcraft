@@ -6,7 +6,9 @@ public class CarvingMinigame : MonoBehaviour
 {
     [Header("Setup")]
     public RawImage drawingCanvas;
-    public Texture2D maskReference;
+    public Texture2D maskReferenceAkacja;
+    public Texture2D maskReferenceWierzba;
+    public Texture2D maskReferencePalma;
     public TMP_Text similarityText;
 
     [Header("Gameplay")]
@@ -20,14 +22,23 @@ public class CarvingMinigame : MonoBehaviour
     private bool isInitialized = false;
 
     // ================= INIT =================
+    public void SetResource(string resource)
+    {
+        switch (resource)
+        {
+            case "acacia": maskReference = maskReferenceAkacja; break;
+            case "willow": maskReference = maskReferenceWierzba; break;
+            case "palm": maskReference = maskReferencePalma; break;
+        }
+    }
+
+    private Texture2D maskReference;
 
     public void InitializeMinigame()
     {
-        // init texture
         drawTexture = new Texture2D(256, 256, TextureFormat.ARGB32, false);
         drawingCanvas.texture = drawTexture;
 
-        // load mask
         maskPixels = maskReference.GetPixels32();
         totalMaskPixels = 0;
         foreach (var col in maskPixels)
@@ -38,8 +49,6 @@ public class CarvingMinigame : MonoBehaviour
         hasWon = false;
         isInitialized = true;
     }
-
-    // ================= LOOP =================
 
     void Update()
     {
@@ -66,8 +75,6 @@ public class CarvingMinigame : MonoBehaviour
                 WinMinigame();
         }
     }
-
-    // ================= GAMEPLAY =================
 
     void DrawBrush(int centerX, int centerY)
     {
@@ -116,8 +123,6 @@ public class CarvingMinigame : MonoBehaviour
         MinigameManager.Instance.ExitMinigame();
     }
 
-    // ================= HELPERS =================
-
     void ClearTexture(Texture2D tex, Color color)
     {
         Color32[] fill = new Color32[tex.width * tex.height];
@@ -129,5 +134,3 @@ public class CarvingMinigame : MonoBehaviour
         tex.Apply();
     }
 }
-
-

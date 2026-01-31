@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 public class MinigameManager : MonoBehaviour
 {
@@ -16,6 +16,9 @@ public class MinigameManager : MonoBehaviour
 
     private bool isMinigameActive = false;
 
+    // 0 = Carving, 1 = MetalPour, 2 = Painting
+    private int currentStep = 0;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -27,10 +30,25 @@ public class MinigameManager : MonoBehaviour
     }
 
     // ================= ENTER =================
-
     public void EnterMinigame(string name)
     {
         if (isMinigameActive) return;
+
+        // Sprawdzenie kolejności
+        if ((name == "MetalPour" && currentStep < 1) ||
+            (name == "MaskPainting" && currentStep < 2))
+        {
+            Debug.LogWarning("Musisz wykonać poprzednią minigrę!");
+            return;
+        }
+
+        // Sprawdzenie zasobów
+        if (!HasRequiredResource(name))
+        {
+            Debug.LogWarning($"Nie masz wymaganych zasobów do {name}");
+            return;
+        }
+
         isMinigameActive = true;
 
         if (playerMovement != null)
@@ -48,23 +66,25 @@ public class MinigameManager : MonoBehaviour
         {
             case "Carving":
                 carvingMinigame.gameObject.SetActive(true);
+                carvingMinigame.SetResource(GetResourceForMinigame(name)); // ustawia teksturę
                 carvingMinigame.InitializeMinigame();
                 break;
 
             case "MetalPour":
                 metalPourMinigame.gameObject.SetActive(true);
+                metalPourMinigame.SetResource(GetResourceForMinigame(name)); // ustawia sprite strumienia
                 metalPourMinigame.InitializeMinigame();
                 break;
 
             case "MaskPainting":
                 maskPaintingMinigame.gameObject.SetActive(true);
+                maskPaintingMinigame.SetResource(GetResourceForMinigame(name)); // ustawia kolor kwiatu
                 maskPaintingMinigame.InitializeMinigame();
                 break;
         }
     }
 
     // ================= EXIT =================
-
     public void ExitMinigame()
     {
         if (!isMinigameActive) return;
@@ -80,6 +100,7 @@ public class MinigameManager : MonoBehaviour
             minigameCanvas.SetActive(false);
 
         DisableAllMinigames();
+        currentStep++; // po ukończeniu minigry przechodzimy do kolejnego kroku
     }
 
     void DisableAllMinigames()
@@ -89,11 +110,9 @@ public class MinigameManager : MonoBehaviour
         maskPaintingMinigame.gameObject.SetActive(false);
     }
 
-    // painting hook
-    // specjalny hook dla painting
+    // ================= painting hook =================
     public void OnPaintingFinished(PaintingTable table)
     {
-        // uruchomienie Coroutine z aktywnego obiektu (MinigameManager)
         StartCoroutine(ReenableTableNextFrame(table));
     }
 
@@ -107,5 +126,45 @@ public class MinigameManager : MonoBehaviour
     {
         return isMinigameActive;
     }
-}
 
+    // ================= Zasoby =================
+    private bool HasRequiredResource(string minigame)
+    {
+        switch (minigame)
+        {
+            case "Carving":
+                return Inventory.instance.GetResources("acacia") > 0 ||
+                       Inventory.instance.GetResources("willow") > 0 ||
+                       Inventory.instance.GetResources("palm") > 0;
+            case "MetalPour":
+                return Inventory.instance.GetResources("iron") > 0 ||
+                       Inventory.instance.GetResources("gold") > 0 ||
+                       Inventory.instance.GetResources("copper") > 0;
+            case "MaskPainting":
+                return Inventory.instance.GetResources("poppy") > 0 ||
+                       Inventory.instance.GetResources("violet") > 0 ||
+                       Inventory.instance.GetResources("chrysanthemum") > 0;
+        }
+        return false;
+    }
+
+    private string GetResourceForMinigame(string minigame)
+    {
+        switch (minigame)
+        {
+            case "Carving":
+                if (Inventory.instance.GetResources("acacia") > 0) return "acacia";
+                if (Inventory.instance.GetResources("willow") > 0) return "willow";
+                return "palm";
+            case "MetalPour":
+                if (Inventory.instance.GetResources("iron") > 0) return "iron";
+                if (Inventory.instance.GetResources("gold") > 0) return "gold";
+                return "copper";
+            case "MaskPainting":
+                if (Inventory.instance.GetResources("poppy") > 0) return "poppy";
+                if (Inventory.instance.GetResources("violet") > 0) return "violet";
+                return "chrysanthemum";
+        }
+        return null;
+    }
+}

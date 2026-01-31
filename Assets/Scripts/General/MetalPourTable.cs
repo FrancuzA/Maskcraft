@@ -4,14 +4,8 @@ public class MetalPourTable : MonoBehaviour, IInteractable
 {
     public void Interact()
     {
-        if (MinigameManager.Instance == null)
-        {
-            Debug.LogError("❌ MinigameManager not found!");
-            return;
-        }
+        if (MinigameManager.Instance == null) return;
 
-        Debug.Log($"✅ Interacted with {gameObject.name} → Starting Metal Pour Minigame");
-        MinigameManager.Instance.EnterMinigame("MetalPour"); // <-- dodany argument
+        MinigameManager.Instance.EnterMinigame("MetalPour");
     }
-
 }

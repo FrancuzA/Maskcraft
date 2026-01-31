@@ -30,6 +30,7 @@ public class OreScript : MonoBehaviour, IInteractable
         Dependencies.Instance.GetDependancy<OreSpawner>().AddToQueue(oreType);
         AddResources();
         Destroy(gameObject);
+        
     }
 
     private void AddResources()
