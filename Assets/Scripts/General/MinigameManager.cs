@@ -12,6 +12,7 @@ public class MinigameManager : MonoBehaviour
     [Header("Minigames")]
     public CarvingMinigame carvingMinigame;
     public MetalPourMinigame metalPourMinigame;
+    public MaskPaintingMinigame maskPaintingMinigame;
 
     private bool isMinigameActive = false;
 
@@ -61,6 +62,12 @@ public class MinigameManager : MonoBehaviour
             metalPourMinigame.gameObject.SetActive(true);
             StartCoroutine(DelayedInitialize(metalPourMinigame));
         }
+        else if (minigameName == "MaskPainting" && maskPaintingMinigame != null)
+        {
+            maskPaintingMinigame.gameObject.SetActive(true);
+            StartCoroutine(DelayedInitialize(maskPaintingMinigame));
+        }
+
     }
 
     private IEnumerator DelayedInitialize(MonoBehaviour minigame)
