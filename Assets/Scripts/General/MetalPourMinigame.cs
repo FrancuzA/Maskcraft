@@ -26,8 +26,7 @@ public class MetalPourMinigame : MonoBehaviour
 
     void Start()
     {
-        metalLeft = totalMetal;
-        fillBar.fillAmount = 0f;
+        InitializeMinigame();
     }
 
     void Update()
@@ -39,18 +38,16 @@ public class MetalPourMinigame : MonoBehaviour
         PourLogic();
     }
 
-    // ---------- STRUMIEÑ ----------
-
     void MoveStream()
     {
+        if (stream == null) return;
         float x = Mathf.Sin(Time.time * speed) * amplitude;
         stream.anchoredPosition = new Vector2(x, stream.anchoredPosition.y);
     }
 
-    // ---------- FORMA (TYLKO X) ----------
-
     void MoveMold()
     {
+        if (mold == null || stream == null) return;
         Vector2 mousePos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             stream.parent as RectTransform,
@@ -58,11 +55,8 @@ public class MetalPourMinigame : MonoBehaviour
             null,
             out mousePos
         );
-
         mold.anchoredPosition = new Vector2(mousePos.x, mold.anchoredPosition.y);
     }
-
-    // ---------- LOGIKA LANIA ----------
 
     void PourLogic()
     {
@@ -76,7 +70,14 @@ public class MetalPourMinigame : MonoBehaviour
             {
                 fillAmount += fillSpeed * Time.deltaTime;
                 fillAmount = Mathf.Clamp01(fillAmount);
-                fillBar.fillAmount = fillAmount;
+                if (fillBar != null)
+                    fillBar.fillAmount = fillAmount;
+            }
+
+            // Nowy warunek: jeœli pasek jest pe³ny, koñcz grê
+            if (fillAmount >= 1f)
+            {
+                EndMinigame();
             }
         }
         else
@@ -85,10 +86,9 @@ public class MetalPourMinigame : MonoBehaviour
         }
     }
 
-    // ---------- KONIEC + OCENA ----------
-
     void EndMinigame()
     {
+        if (!isPlaying) return;
         isPlaying = false;
 
         Debug.Log("FINAL FILL: " + fillAmount);
@@ -101,13 +101,26 @@ public class MetalPourMinigame : MonoBehaviour
             Debug.Log("BAD MASK");
         else
             Debug.Log("YOU FUCKED IT");
+
+        // Wywo³anie MinigameManager, aby zakoñczyæ minigierkê
+        if (MinigameManager.Instance != null)
+        {
+            MinigameManager.Instance.ExitMinigame();
+        }
+        else
+        {
+            // fallback, przywrócenie kursora
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
+
     public void InitializeMinigame()
     {
         fillAmount = 0f;
         metalLeft = totalMetal;
         isPlaying = true;
-        fillBar.fillAmount = 0f;
+        if (fillBar != null)
+            fillBar.fillAmount = 0f;
     }
-
 }
