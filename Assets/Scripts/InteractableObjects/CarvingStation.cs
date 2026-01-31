@@ -19,13 +19,14 @@ public class CarvingStation : MonoBehaviour, IInteractable
     {
         if (MinigameManager.Instance == null)
         {
-            Debug.LogError("❌ MinigameManager not found! Create empty GameObject with MinigameManager script.");
+            Debug.LogError("❌ MinigameManager not found!");
             return;
         }
 
-        Debug.Log($"✅ Interacted with {gameObject.name} → Starting carving minigame");
-        MinigameManager.Instance.EnterMinigame();
+        Debug.Log($"✅ Interacted with {gameObject.name} → Starting Carving Minigame");
+        MinigameManager.Instance.EnterMinigame("Carving"); // <-- dodany argument
     }
+
 
     // Optional: visual feedback when player looks at station
     private void OnDrawGizmos()
