@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class PaintingTable : MonoBehaviour, IInteractable
 {
@@ -12,8 +13,7 @@ public class PaintingTable : MonoBehaviour, IInteractable
         if (MinigameManager.Instance == null) return;
         if (MinigameManager.Instance.IsMinigameActive()) return;
 
-        gameObject.SetActive(false); // wyłącz stół
-
+        // Spawn maski przed kamerą
         Camera cam = Camera.main;
         Vector3 pos = cam.transform.position + cam.transform.forward * maskDistanceFromCamera;
         Quaternion rot = Quaternion.LookRotation(cam.transform.forward);
@@ -23,24 +23,37 @@ public class PaintingTable : MonoBehaviour, IInteractable
         MaskPaintingMinigame minigame = MinigameManager.Instance.maskPaintingMinigame;
         minigame.maskModel = currentMaskInstance.transform;
 
-        // ZBIERZ POINTY Z MASKI
+        // Pobierz punkty do malowania
         minigame.points.Clear();
         PaintablePoint[] found = currentMaskInstance.GetComponentsInChildren<PaintablePoint>();
         minigame.points.AddRange(found);
 
         Debug.Log("🎯 Found paint points: " + found.Length);
 
+        // callback po zakończeniu minigry
         minigame.OnMinigameEnd = OnMinigameEnd;
 
+        // Start minigry
         MinigameManager.Instance.EnterMinigame("MaskPainting");
         minigame.InitializeMinigame();
+
+        // Wyłącz stół dopiero po tym, jak wszystko jest uruchomione
+        gameObject.SetActive(false);
     }
 
     void OnMinigameEnd()
     {
-        Destroy(currentMaskInstance);
+        // 1. Zakończ minigre (canvas + gracz)
+        MinigameManager.Instance.ExitMinigame();
+
+        // 2. Usuń maskę
+        if (currentMaskInstance != null)
+            Destroy(currentMaskInstance);
+
         currentMaskInstance = null;
 
-        MinigameManager.Instance.OnPaintingFinished(this);
+        // 3. Włącz stół ponownie przez MinigameManager
+        if (MinigameManager.Instance != null)
+            MinigameManager.Instance.OnPaintingFinished(this);
     }
 }

@@ -17,16 +17,19 @@ public class MetalPourMinigame : MonoBehaviour
     public float fillSpeed = 0.3f;
 
     [Header("Metal")]
-    public float totalMetal = 200f;   // ile metalu
-    public float pourSpeed = 10f;     // jak szybko ubywa
+    public float totalMetal = 200f;
+    public float pourSpeed = 10f;
 
     private float fillAmount = 0f;
     private float metalLeft;
-    private bool isPlaying = true;
+    private bool isPlaying = false;
 
-    void Start()
+    public void InitializeMinigame()
     {
-        InitializeMinigame();
+        fillAmount = 0f;
+        metalLeft = totalMetal;
+        isPlaying = true;
+        fillBar.fillAmount = 0f;
     }
 
     void Update()
@@ -40,14 +43,12 @@ public class MetalPourMinigame : MonoBehaviour
 
     void MoveStream()
     {
-        if (stream == null) return;
         float x = Mathf.Sin(Time.time * speed) * amplitude;
         stream.anchoredPosition = new Vector2(x, stream.anchoredPosition.y);
     }
 
     void MoveMold()
     {
-        if (mold == null || stream == null) return;
         Vector2 mousePos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             stream.parent as RectTransform,
@@ -60,27 +61,18 @@ public class MetalPourMinigame : MonoBehaviour
 
     void PourLogic()
     {
-        if (metalLeft > 0)
+        metalLeft -= pourSpeed * Time.deltaTime;
+
+        float distance = Mathf.Abs(stream.anchoredPosition.x - mold.anchoredPosition.x);
+
+        if (distance < tolerance)
         {
-            metalLeft -= pourSpeed * Time.deltaTime;
-
-            float distance = Mathf.Abs(stream.anchoredPosition.x - mold.anchoredPosition.x);
-
-            if (distance < tolerance)
-            {
-                fillAmount += fillSpeed * Time.deltaTime;
-                fillAmount = Mathf.Clamp01(fillAmount);
-                if (fillBar != null)
-                    fillBar.fillAmount = fillAmount;
-            }
-
-            // Nowy warunek: jeœli pasek jest pe³ny, koñcz grê
-            if (fillAmount >= 1f)
-            {
-                EndMinigame();
-            }
+            fillAmount += fillSpeed * Time.deltaTime;
+            fillAmount = Mathf.Clamp01(fillAmount);
+            fillBar.fillAmount = fillAmount;
         }
-        else
+
+        if (fillAmount >= 1f || metalLeft <= 0f)
         {
             EndMinigame();
         }
@@ -88,39 +80,7 @@ public class MetalPourMinigame : MonoBehaviour
 
     void EndMinigame()
     {
-        if (!isPlaying) return;
         isPlaying = false;
-
-        Debug.Log("FINAL FILL: " + fillAmount);
-
-        if (fillAmount > 0.9f)
-            Debug.Log("PERFECT MASK");
-        else if (fillAmount > 0.6f)
-            Debug.Log("GOOD MASK");
-        else if (fillAmount > 0.3f)
-            Debug.Log("BAD MASK");
-        else
-            Debug.Log("YOU FUCKED IT");
-
-        // Wywo³anie MinigameManager, aby zakoñczyæ minigierkê
-        if (MinigameManager.Instance != null)
-        {
-            MinigameManager.Instance.ExitMinigame();
-        }
-        else
-        {
-            // fallback, przywrócenie kursora
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-    }
-
-    public void InitializeMinigame()
-    {
-        fillAmount = 0f;
-        metalLeft = totalMetal;
-        isPlaying = true;
-        if (fillBar != null)
-            fillBar.fillAmount = 0f;
+        MinigameManager.Instance.ExitMinigame();
     }
 }

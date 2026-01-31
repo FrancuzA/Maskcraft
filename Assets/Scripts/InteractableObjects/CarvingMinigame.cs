@@ -15,68 +15,37 @@ public class CarvingMinigame : MonoBehaviour
 
     private Texture2D drawTexture;
     private Color32[] maskPixels;
-    private bool hasWon = false;
     private int totalMaskPixels = 0;
+    private bool hasWon = false;
     private bool isInitialized = false;
 
-    // Initialize texture early to avoid null references on first interaction
-    void Awake()
-    {
-        drawTexture = new Texture2D(256, 256, TextureFormat.ARGB32, false);
-        ClearTexture(drawTexture, Color.black);
-        drawTexture.Apply();
-    }
+    // ================= INIT =================
 
-    void Start()
-    {
-        // Assign texture to RawImage if not already set
-        if (drawingCanvas != null && drawingCanvas.texture == null)
-        {
-            drawingCanvas.texture = drawTexture;
-        }
-    }
-
-    // Called by MinigameManager when player starts minigame
     public void InitializeMinigame()
     {
-        // Validate mask texture setup
-        if (maskReference == null)
-        {
-            Debug.LogError("maskReference not assigned in CarvingMinigame!");
-            return;
-        }
+        // init texture
+        drawTexture = new Texture2D(256, 256, TextureFormat.ARGB32, false);
+        drawingCanvas.texture = drawTexture;
 
-        // Load mask pixels and count white areas (the shape to trace)
+        // load mask
         maskPixels = maskReference.GetPixels32();
         totalMaskPixels = 0;
         foreach (var col in maskPixels)
-        {
             if (col.r > 0.5f) totalMaskPixels++;
-        }
 
-        if (totalMaskPixels == 0)
-        {
-            Debug.LogError("maskReference has no white pixels! Must be white shape on black background.");
-            return;
-        }
-
-        // Reset drawing state
         ClearTexture(drawTexture, Color.black);
-        drawTexture.Apply();
+
         hasWon = false;
         isInitialized = true;
-
-        // Show cursor for drawing
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
     }
+
+    // ================= LOOP =================
 
     void Update()
     {
         if (!isInitialized || hasWon) return;
 
-        // Draw white brush strokes where player clicks
-        if (Input.GetMouseButton(0) && drawingCanvas != null && IsPointerOver(drawingCanvas.rectTransform))
+        if (Input.GetMouseButton(0))
         {
             Vector2 localPos;
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -88,39 +57,39 @@ public class CarvingMinigame : MonoBehaviour
             }
         }
 
-        // Check completion every 0.3 seconds
-        if (Time.frameCount % 18 == 0 && totalMaskPixels > 0)
+        if (Time.frameCount % 18 == 0)
         {
             float similarity = CalculateSimilarity();
+            similarityText.text = $"Coverage: {(similarity * 100):F0}%";
 
-            if (similarityText != null)
-                similarityText.text = $"Coverage: {(similarity * 100):F0}%";
-
-            if (similarity >= winThreshold && !hasWon)
-            {
-                WinMinigame(similarity);
-            }
+            if (similarity >= winThreshold)
+                WinMinigame();
         }
     }
+
+    // ================= GAMEPLAY =================
 
     void DrawBrush(int centerX, int centerY)
     {
         int radius = Mathf.FloorToInt(brushSize / 2);
+
         for (int y = -radius; y <= radius; y++)
         {
             for (int x = -radius; x <= radius; x++)
             {
                 int px = centerX + x;
                 int py = centerY + y;
+
                 if (px < 0 || px >= 256 || py < 0 || py >= 256) continue;
                 if (Mathf.Sqrt(x * x + y * y) > radius) continue;
+
                 drawTexture.SetPixel(px, py, Color.white);
             }
         }
+
         drawTexture.Apply(false);
     }
 
-    // Calculate % of mask shape covered by player's drawing
     float CalculateSimilarity()
     {
         Color32[] drawn = drawTexture.GetPixels32();
@@ -132,45 +101,33 @@ public class CarvingMinigame : MonoBehaviour
                 drawnOnMask++;
         }
 
-        return totalMaskPixels > 0 ? (float)drawnOnMask / totalMaskPixels : 0f;
+        return (float)drawnOnMask / totalMaskPixels;
     }
 
-    void WinMinigame(float similarity)
+    void WinMinigame()
     {
         hasWon = true;
-        if (similarityText != null)
-            similarityText.text = $"✅ COMPLETE {(similarity * 100):F0}%";
-
-        Invoke("ExitMinigame", 2f);
+        similarityText.text = "✅ COMPLETE";
+        Invoke(nameof(ExitMinigame), 1.5f);
     }
 
     void ExitMinigame()
     {
-        if (MinigameManager.Instance != null)
-        {
-            MinigameManager.Instance.ExitMinigame();
-        }
-        else
-        {
-            
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+        MinigameManager.Instance.ExitMinigame();
     }
+
+    // ================= HELPERS =================
 
     void ClearTexture(Texture2D tex, Color color)
     {
-        if (tex == null) return;
         Color32[] fill = new Color32[tex.width * tex.height];
-        Color32 col = (Color32)color;
-        for (int i = 0; i < fill.Length; i++) fill[i] = col;
+        Color32 col = color;
+        for (int i = 0; i < fill.Length; i++)
+            fill[i] = col;
+
         tex.SetPixels32(fill);
         tex.Apply();
     }
-
-    bool IsPointerOver(RectTransform rt)
-    {
-        if (rt == null) return false;
-        return RectTransformUtility.RectangleContainsScreenPoint(rt, Input.mousePosition, null);
-    }
 }
+
+

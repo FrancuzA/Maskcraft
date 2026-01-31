@@ -2148,7 +2148,7 @@ MonoBehaviour:
   - {fileID: 246848548}
   progressText: {fileID: 1746226877}
   autoRotationSpeed: 20
-  manualRotationSpeed: 50
+  manualRotationSpeed: 60
 --- !u!1 &1962644655
 GameObject:
   m_ObjectHideFlags: 0

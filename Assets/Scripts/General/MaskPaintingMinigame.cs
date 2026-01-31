@@ -15,32 +15,21 @@ public class MaskPaintingMinigame : MonoBehaviour
     public float manualRotationSpeed = 50f;
 
     private bool isInitialized = false;
-    private bool hasEnded = false;
 
-    public Action OnMinigameEnd;
+    public Action OnMinigameEnd; // callback dla PaintingTable
 
     public void InitializeMinigame()
     {
-        if (points.Count == 0)
-        {
-            Debug.LogError("❌ NO PAINTABLE POINTS ASSIGNED!");
-            return;
-        }
-
-        hasEnded = false;
-        isInitialized = true;
-
         foreach (var p in points)
             p.ResetPoint();
 
+        isInitialized = true;
         UpdateProgressText();
-
-        Debug.Log("🎮 MaskPainting initialized with " + points.Count + " points");
     }
 
     void Update()
     {
-        if (!isInitialized || hasEnded) return;
+        if (!isInitialized) return;
 
         HandleRotation();
         HandlePainting();
@@ -63,14 +52,13 @@ public class MaskPaintingMinigame : MonoBehaviour
         if (!Input.GetMouseButtonDown(0)) return;
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, 10f))
+        if (Physics.Raycast(ray, out RaycastHit hit))
         {
             PaintablePoint point = hit.collider.GetComponent<PaintablePoint>();
             if (point != null && !point.isPainted)
             {
                 point.Paint();
                 UpdateProgressText();
-                Debug.Log("🟢 Painted: " + point.name);
             }
         }
     }
@@ -78,17 +66,12 @@ public class MaskPaintingMinigame : MonoBehaviour
     void CheckCompletion()
     {
         foreach (var p in points)
-        {
-            if (!p.isPainted)
-                return;
-        }
+            if (!p.isPainted) return;
 
-        // WSZYSTKIE POMALOWANE
-        hasEnded = true;
+        // KONIEC minigry
         isInitialized = false;
 
-        Debug.Log("🏁 ALL POINTS PAINTED - END MINIGAME");
-
+        // wywołanie callback do stołu, który zadba o despawn maski i re-enable stołu
         OnMinigameEnd?.Invoke();
     }
 
@@ -100,6 +83,7 @@ public class MaskPaintingMinigame : MonoBehaviour
         foreach (var p in points)
             if (p.isPainted) painted++;
 
-        progressText.text = $"Points: {painted}/{points.Count}";
+        progressText.text = $"{painted}/{points.Count}";
     }
 }
+
