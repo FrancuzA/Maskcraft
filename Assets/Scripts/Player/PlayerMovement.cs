@@ -17,27 +17,35 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 velocity;
     private float xRotation = 0f;
 
+    void Awake()
+    {
+        controller = GetComponent<CharacterController>();
+    }
+
     void Start()
     {
-        Dependencies.Instance.RegisterDependency<PlayerMovement>(this);
-        controller = GetComponent<CharacterController>();
+        if (Dependencies.Instance != null)
+            Dependencies.Instance.RegisterDependency<PlayerMovement>(this);
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-void Update()
-{
-    // 🔑 CRITICAL: Skip FPS controls during minigame
-    if (MinigameManager.Instance && MinigameManager.Instance.IsMinigameActive())
-        return;
 
-    HandleLook();
-    HandleInput();
-}
+    void Update()
+    {
+        if (MinigameManager.Instance != null && MinigameManager.Instance.IsMinigameActive())
+            return; // zablokuj input tylko kiedy minigra jest aktywna
+        HandleLook();
+        HandleInput();
+    }
+
 
     void FixedUpdate()
     {
+        if (MinigameManager.Instance != null && MinigameManager.Instance.IsMinigameActive())
+            return;
+
         HandleMovement();
         ApplyGravity();
     }

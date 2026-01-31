@@ -152,7 +152,7 @@ public class CarvingMinigame : MonoBehaviour
         }
         else
         {
-            // Fallback cursor state if manager missing
+            
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
