@@ -460,7 +460,7 @@ namespace MTE
 
         public static object GetRenderPipelineAsset()
         {
-            return UnityEngine.Rendering.GraphicsSettings.renderPipelineAsset;
+            return UnityEngine.Rendering.GraphicsSettings.defaultRenderPipeline;
         }
 
         public static void SetTextureFormatToA8(TextureImporterPlatformSettings textureSettings)

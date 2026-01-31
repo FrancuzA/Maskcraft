@@ -5,13 +5,9 @@ public class MinigameManager : MonoBehaviour
 {
     public static MinigameManager Instance { get; private set; }
 
-    [Header("References")]
     public GameObject minigameCanvas;
     public PlayerMovement playerMovement;
 
-    [Header("Minigames")]
-    public CarvingMinigame carvingMinigame;
-    public MetalPourMinigame metalPourMinigame;
     public MaskPaintingMinigame maskPaintingMinigame;
 
     private bool isMinigameActive = false;
@@ -24,60 +20,25 @@ public class MinigameManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
-
-        if (minigameCanvas != null)
-            minigameCanvas.SetActive(false);
-
-        isMinigameActive = false; // pewność, że na start nie blokuje gracza
     }
 
-
-    // Odpalona przez stół
-    public void EnterMinigame(string minigameName)
+    public void EnterMinigame(string name)
     {
         if (isMinigameActive) return;
         isMinigameActive = true;
 
-        // Disable player movement
-        if (playerMovement != null)
-            playerMovement.enabled = false;
-
-        // Show cursor for UI interaction
+        playerMovement.enabled = false;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
-        // Enable minigame canvas
-        if (minigameCanvas != null)
-            minigameCanvas.SetActive(true);
-
-        // Włącz odpowiednią minigierkę
-        if (minigameName == "Carving" && carvingMinigame != null)
-        {
-            carvingMinigame.gameObject.SetActive(true);
-            StartCoroutine(DelayedInitialize(carvingMinigame));
-        }
-        else if (minigameName == "MetalPour" && metalPourMinigame != null)
-        {
-            metalPourMinigame.gameObject.SetActive(true);
-            StartCoroutine(DelayedInitialize(metalPourMinigame));
-        }
-        else if (minigameName == "MaskPainting" && maskPaintingMinigame != null)
-        {
-            maskPaintingMinigame.gameObject.SetActive(true);
-            StartCoroutine(DelayedInitialize(maskPaintingMinigame));
-        }
-
+        minigameCanvas.SetActive(true);
+        maskPaintingMinigame.gameObject.SetActive(true);
     }
 
-    private IEnumerator DelayedInitialize(MonoBehaviour minigame)
+    public void OnPaintingFinished(PaintingTable table)
     {
-        yield return null;
-
-        if (minigame is CarvingMinigame carve)
-            carve.InitializeMinigame();
-        else if (minigame is MetalPourMinigame pour)
-            pour.InitializeMinigame();
+        ExitMinigame();
+        StartCoroutine(ReenableTableNextFrame(table));
     }
 
     public void ExitMinigame()
@@ -85,24 +46,22 @@ public class MinigameManager : MonoBehaviour
         if (!isMinigameActive) return;
         isMinigameActive = false;
 
-        // Restore player movement
-        if (playerMovement != null)
-            playerMovement.enabled = true;
-
-        // Hide cursor
+        playerMovement.enabled = true;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        // Hide minigame canvas
-        if (minigameCanvas != null)
-            minigameCanvas.SetActive(false);
-
-        // Dezaktywuj wszystkie minigierki
-        if (carvingMinigame != null)
-            carvingMinigame.gameObject.SetActive(false);
-        if (metalPourMinigame != null)
-            metalPourMinigame.gameObject.SetActive(false);
+        minigameCanvas.SetActive(false);
+        maskPaintingMinigame.gameObject.SetActive(false);
     }
 
-    public bool IsMinigameActive() => isMinigameActive;
+    private IEnumerator ReenableTableNextFrame(PaintingTable table)
+    {
+        yield return null; // 1 frame buffer
+        table.gameObject.SetActive(true);
+    }
+
+    public bool IsMinigameActive()
+    {
+        return isMinigameActive;
+    }
 }

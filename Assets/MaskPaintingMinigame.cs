@@ -1,5 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
+using System;
 using System.Collections.Generic;
 
 public class MaskPaintingMinigame : MonoBehaviour
@@ -14,23 +15,32 @@ public class MaskPaintingMinigame : MonoBehaviour
     public float manualRotationSpeed = 50f;
 
     private bool isInitialized = false;
+    private bool hasEnded = false;
+
+    public Action OnMinigameEnd;
 
     public void InitializeMinigame()
     {
-        foreach (var p in points)
+        if (points.Count == 0)
         {
-            p.isPainted = false;
-            if (p.GetComponent<Renderer>() != null)
-                p.GetComponent<Renderer>().material.color = Color.white;
+            Debug.LogError("❌ NO PAINTABLE POINTS ASSIGNED!");
+            return;
         }
 
+        hasEnded = false;
         isInitialized = true;
+
+        foreach (var p in points)
+            p.ResetPoint();
+
         UpdateProgressText();
+
+        Debug.Log("🎮 MaskPainting initialized with " + points.Count + " points");
     }
 
     void Update()
     {
-        if (!isInitialized) return;
+        if (!isInitialized || hasEnded) return;
 
         HandleRotation();
         HandlePainting();
@@ -39,6 +49,8 @@ public class MaskPaintingMinigame : MonoBehaviour
 
     void HandleRotation()
     {
+        if (maskModel == null) return;
+
         float rotation = 0f;
         if (Input.GetKey(KeyCode.LeftArrow)) rotation = -manualRotationSpeed * Time.deltaTime;
         if (Input.GetKey(KeyCode.RightArrow)) rotation = manualRotationSpeed * Time.deltaTime;
@@ -48,17 +60,17 @@ public class MaskPaintingMinigame : MonoBehaviour
 
     void HandlePainting()
     {
-        if (Input.GetMouseButton(0))
+        if (!Input.GetMouseButtonDown(0)) return;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, 10f))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, 5f))
+            PaintablePoint point = hit.collider.GetComponent<PaintablePoint>();
+            if (point != null && !point.isPainted)
             {
-                PaintablePoint point = hit.collider.GetComponent<PaintablePoint>();
-                if (point != null)
-                {
-                    point.Paint();
-                    UpdateProgressText();
-                }
+                point.Paint();
+                UpdateProgressText();
+                Debug.Log("🟢 Painted: " + point.name);
             }
         }
     }
@@ -67,22 +79,27 @@ public class MaskPaintingMinigame : MonoBehaviour
     {
         foreach (var p in points)
         {
-            if (!p.isPainted) return; // je�li cho� jeden nie pomalowany, return
+            if (!p.isPainted)
+                return;
         }
 
-        // wygrana
+        // WSZYSTKIE POMALOWANE
+        hasEnded = true;
         isInitialized = false;
-        if (MinigameManager.Instance != null)
-            MinigameManager.Instance.ExitMinigame();
+
+        Debug.Log("🏁 ALL POINTS PAINTED - END MINIGAME");
+
+        OnMinigameEnd?.Invoke();
     }
 
     void UpdateProgressText()
     {
-        if (progressText != null)
-        {
-            int paintedCount = 0;
-            foreach (var p in points) if (p.isPainted) paintedCount++;
-            progressText.text = $"Points: {paintedCount}/{points.Count}";
-        }
+        if (progressText == null) return;
+
+        int painted = 0;
+        foreach (var p in points)
+            if (p.isPainted) painted++;
+
+        progressText.text = $"Points: {painted}/{points.Count}";
     }
 }
