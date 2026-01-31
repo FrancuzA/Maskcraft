@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 8376626109142210431}
   - component: {fileID: 2759505749730511757}
   - component: {fileID: 7667556306926389003}
+  - component: {fileID: 8861431220040023756}
+  - component: {fileID: -1491223883968135505}
   m_Layer: 0
   m_Name: Copper
   m_TagString: Untagged
@@ -86,3 +88,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &8861431220040023756
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7866972198936585379}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2898191543649519921, guid: 7483254859e3b094a80bcfb6e33fdd82, type: 3}
+--- !u!114 &-1491223883968135505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7866972198936585379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41ae0cf891c23f949921652dda715a8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  oreHP: 100
+  damage: 10
+  oreType: copper
+  oreValue: 1

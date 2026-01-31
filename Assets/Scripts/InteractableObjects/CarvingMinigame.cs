@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static ResourcesTypes;
@@ -10,6 +11,9 @@ public class CarvingMinigame : MonoBehaviour
     public Texture2D maskReferenceAkacja;
     public Texture2D maskReferenceWierzba;
     public Texture2D maskReferencePalma;
+    public Texture2D guideMaskReferenceAkacja;
+    public Texture2D guideMaskReferenceWierzba;
+    public Texture2D guideMaskReferencePalma;
     public RawImage maskGuide;
     public TMP_Text similarityText;
 
@@ -31,17 +35,17 @@ public class CarvingMinigame : MonoBehaviour
         {
             case "acacia":
                 maskReference = maskReferenceAkacja;
-                maskGuide.texture = maskReferenceAkacja;
+                maskGuide.texture = guideMaskReferenceAkacja;
                 currentWood = WoodType.Acacia;
                 break;
             case "willow":
                 maskReference = maskReferenceWierzba;
-                maskGuide.texture = maskReferenceWierzba;
+                maskGuide.texture = guideMaskReferenceWierzba;
                 currentWood = WoodType.Willow;
                 break;
             case "palm":
                 maskReference = maskReferencePalma;
-                maskGuide.texture = maskReferencePalma;
+                maskGuide.texture = guideMaskReferencePalma;
                 currentWood = WoodType.Palm;
                 break;
         }
@@ -132,6 +136,8 @@ public class CarvingMinigame : MonoBehaviour
 
         Invoke(nameof(ExitMinigame), 1.5f);
     }
+
+
 
     void ExitMinigame()
     {

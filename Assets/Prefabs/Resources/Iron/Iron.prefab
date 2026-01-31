@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 739219460770705508}
   - component: {fileID: 6037511403281339202}
   - component: {fileID: 886293089776789283}
+  - component: {fileID: 2674213861165266356}
+  - component: {fileID: 803788996271207697}
   m_Layer: 0
   m_Name: Iron
   m_TagString: Untagged
@@ -86,3 +88,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &2674213861165266356
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8659917008774370469}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2898191543649519921, guid: 7483a64d18732f545b7307787269044e, type: 3}
+--- !u!114 &803788996271207697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8659917008774370469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41ae0cf891c23f949921652dda715a8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  oreHP: 100
+  damage: 10
+  oreType: iron
+  oreValue: 1
