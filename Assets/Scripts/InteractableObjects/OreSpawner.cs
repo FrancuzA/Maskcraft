@@ -11,6 +11,11 @@ public class OreSpawner : MonoBehaviour
     public List<GameObject> oreTypes; // copper iron gold
     public bool isSpawning = false;
 
+    private void Awake()
+    {
+        Dependencies.Instance.RegisterDependency<OreSpawner>(this);
+    }
+
     public void AddToQueue(string oreType)
     {
         oreToSpawn.Add(oreType);
