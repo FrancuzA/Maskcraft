@@ -14,14 +14,12 @@ public class TreeStump : MonoBehaviour
     public void CreateNewTree()
     {
         transform.DestroyAllChildren();
-        Debug.Log("growing new tree");
         Instantiate(treeBody, transform.position + treeSpawnOffset, Quaternion.identity, gameObject.transform);
         isGrowwingNewTree = false;
     }
 
     public void StartGrowingTree()
     {
-        Debug.Log("information recieved");
         if(!isGrowwingNewTree)
          StartCoroutine(GrowTree());
     }
@@ -29,7 +27,6 @@ public class TreeStump : MonoBehaviour
     public IEnumerator GrowTree()
     {
         isGrowwingNewTree = true;
-        Debug.Log("starting counting");
         yield return new WaitForSecondsRealtime(timer);
         CreateNewTree();
     }
