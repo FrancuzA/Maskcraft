@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
@@ -24,21 +25,22 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController controller;
     private Vector3 velocity;
     private float xRotation = 0f;
+    private bool isWalking = false;
+    private Musicmanager musicManager;
 
 
 
     void Awake()
     {
         controller = GetComponent<CharacterController>();
+        Dependencies.Instance.RegisterDependency<PlayerMovement>(this);
     }
 
     void Start()
     {
-        if (Dependencies.Instance != null)
-            Dependencies.Instance.RegisterDependency<PlayerMovement>(this);
-
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        musicManager = Dependencies.Instance.GetDependancy<Musicmanager>();
     }
 
 
@@ -66,12 +68,24 @@ public class PlayerMovement : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
         float speed = moveSpeed;
-        if (Input.GetKey(KeyCode.LeftShift))
+
+        if (Mathf.Abs(x) + Mathf.Abs(z) < 0.05)
         {
+            if (!isWalking)
+            {
+                WalkAnim.SetTrigger("Stopped");
+            }
+             
+            isWalking = false;
+        }
+        else if (Input.GetKey(KeyCode.LeftShift))
+        {
+            WalkAnim.SetTrigger("Run");
             speed = moveSpeed * sprintMultiplier;
         }
 
-        speed = moveSpeed * sprintMultiplier;
+        else WalkAnim.SetTrigger("Walk");
+
 
         Vector3 move = transform.right * x + transform.forward * z;
         controller.Move(move * speed * Time.fixedDeltaTime);
@@ -134,11 +148,14 @@ public class PlayerMovement : MonoBehaviour
 
     public void TakeStep()
     {
+        Debug.Log("TakingStep");
         RaycastHit hit;
 
         if (Physics.Raycast(transform.position, Vector3.down, out hit, distToGround + 0.5f))
         {
             string GroundType = hit.collider.tag;
+           musicManager.PlayStep(GroundType);
+
         }
     }
 }
