@@ -15,8 +15,25 @@ public class MaskPaintingMinigame : MonoBehaviour
     public float manualRotationSpeed = 50f;
 
     private bool isInitialized = false;
+    private Color flowerColor = Color.green;
 
     public Action OnMinigameEnd; // callback dla PaintingTable
+
+    // ================= INIT =================
+    public void SetResource(string flower)
+    {
+        switch (flower)
+        {
+            case "Roza": flowerColor = Color.red; break;
+            case "Fiolka": flowerColor = Color.magenta; break;
+            case "Slonecznik": flowerColor = Color.yellow; break;
+        }
+
+        foreach (var p in points)
+        {
+            p.paintColor = flowerColor;
+        }
+    }
 
     public void InitializeMinigame()
     {
@@ -68,10 +85,7 @@ public class MaskPaintingMinigame : MonoBehaviour
         foreach (var p in points)
             if (!p.isPainted) return;
 
-        // KONIEC minigry
         isInitialized = false;
-
-        // wywołanie callback do stołu, który zadba o despawn maski i re-enable stołu
         OnMinigameEnd?.Invoke();
     }
 
@@ -86,4 +100,3 @@ public class MaskPaintingMinigame : MonoBehaviour
         progressText.text = $"{painted}/{points.Count}";
     }
 }
-

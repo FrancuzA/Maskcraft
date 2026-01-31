@@ -8,6 +8,11 @@ public class MetalPourMinigame : MonoBehaviour
     public RectTransform mold;
     public Image fillBar;
 
+    [Header("Stream Sprites")]
+    public Sprite zelazoSprite;
+    public Sprite zlotoSprite;
+    public Sprite miedzSprite;
+
     [Header("Stream movement")]
     public float amplitude = 300f;
     public float speed = 2f;
@@ -24,10 +29,26 @@ public class MetalPourMinigame : MonoBehaviour
     private float metalLeft;
     private bool isPlaying = false;
 
+    private string currentMetal;
+
+    // ================= INIT =================
+    public void SetResource(string metal)
+    {
+        currentMetal = metal;
+
+        Image img = stream.GetComponent<Image>();
+        switch (metal)
+        {
+            case "iron": img.sprite = zelazoSprite; break;
+            case "gold": img.sprite = zlotoSprite; break;
+            case "copper": img.sprite = miedzSprite; break;
+        }
+    }
+
     public void InitializeMinigame()
     {
-        fillAmount = 0f;
         metalLeft = totalMetal;
+        fillAmount = 0f;
         isPlaying = true;
         fillBar.fillAmount = 0f;
     }
@@ -36,51 +57,33 @@ public class MetalPourMinigame : MonoBehaviour
     {
         if (!isPlaying) return;
 
-        MoveStream();
-        MoveMold();
-        PourLogic();
-    }
-
-    void MoveStream()
-    {
+        // Animacja strumienia
         float x = Mathf.Sin(Time.time * speed) * amplitude;
         stream.anchoredPosition = new Vector2(x, stream.anchoredPosition.y);
-    }
 
-    void MoveMold()
-    {
-        Vector2 mousePos;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            stream.parent as RectTransform,
-            Input.mousePosition,
-            null,
-            out mousePos
-        );
-        mold.anchoredPosition = new Vector2(mousePos.x, mold.anchoredPosition.y);
-    }
-
-    void PourLogic()
-    {
-        metalLeft -= pourSpeed * Time.deltaTime;
-
-        float distance = Mathf.Abs(stream.anchoredPosition.x - mold.anchoredPosition.x);
-
-        if (distance < tolerance)
+        // Pour
+        if (Input.GetMouseButton(0) && metalLeft > 0f)
         {
             fillAmount += fillSpeed * Time.deltaTime;
+            metalLeft -= pourSpeed * Time.deltaTime;
+
             fillAmount = Mathf.Clamp01(fillAmount);
             fillBar.fillAmount = fillAmount;
         }
 
-        if (fillAmount >= 1f || metalLeft <= 0f)
-        {
-            EndMinigame();
-        }
+        if (fillAmount >= 1f)
+            WinMinigame();
     }
 
-    void EndMinigame()
+    void WinMinigame()
     {
         isPlaying = false;
+        fillBar.fillAmount = 1f;
+        Invoke(nameof(ExitMinigame), 1.5f);
+    }
+
+    void ExitMinigame()
+    {
         MinigameManager.Instance.ExitMinigame();
     }
 }
