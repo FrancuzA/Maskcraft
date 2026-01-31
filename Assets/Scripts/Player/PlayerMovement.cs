@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
@@ -25,11 +25,15 @@ public class PlayerMovement : MonoBehaviour
         Cursor.visible = false;
     }
 
-    void Update()
-    {
-        HandleLook();
-        HandleInput();
-    }
+void Update()
+{
+    // 🔑 CRITICAL: Skip FPS controls during minigame
+    if (MinigameManager.Instance && MinigameManager.Instance.IsMinigameActive())
+        return;
+
+    HandleLook();
+    HandleInput();
+}
 
     void FixedUpdate()
     {
