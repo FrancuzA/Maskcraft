@@ -27,6 +27,7 @@ public class OreScript : MonoBehaviour, IInteractable
 
     private void DestroyOre()
     {
+        Dependencies.Instance.GetDependancy<OreSpawner>().AddToQueue(oreType);
         AddResources();
         Destroy(gameObject);
     }
