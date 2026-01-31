@@ -11,7 +11,7 @@ TagManager:
   - Terrain
   - Water
   - UI
-  - Ground
+  - Paintable
   - 
   - 
   - 
@@ -38,6 +38,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: MaskLayer
+    uniqueID: 1072218895
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

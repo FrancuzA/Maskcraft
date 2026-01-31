@@ -5,7 +5,7 @@ public class MinigameManager : MonoBehaviour
 {
     public static MinigameManager Instance { get; private set; }
 
-    [Header("References")]
+    [Header("Core")]
     public GameObject minigameCanvas;
     public PlayerMovement playerMovement;
 
@@ -24,85 +24,88 @@ public class MinigameManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
-
-        if (minigameCanvas != null)
-            minigameCanvas.SetActive(false);
-
-        isMinigameActive = false; // pewność, że na start nie blokuje gracza
     }
 
+    // ================= ENTER =================
 
-    // Odpalona przez stół
-    public void EnterMinigame(string minigameName)
+    public void EnterMinigame(string name)
     {
         if (isMinigameActive) return;
         isMinigameActive = true;
 
-        // Disable player movement
         if (playerMovement != null)
             playerMovement.enabled = false;
 
-        // Show cursor for UI interaction
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
-        // Enable minigame canvas
         if (minigameCanvas != null)
             minigameCanvas.SetActive(true);
 
-        // Włącz odpowiednią minigierkę
-        if (minigameName == "Carving" && carvingMinigame != null)
-        {
-            carvingMinigame.gameObject.SetActive(true);
-            StartCoroutine(DelayedInitialize(carvingMinigame));
-        }
-        else if (minigameName == "MetalPour" && metalPourMinigame != null)
-        {
-            metalPourMinigame.gameObject.SetActive(true);
-            StartCoroutine(DelayedInitialize(metalPourMinigame));
-        }
-        else if (minigameName == "MaskPainting" && maskPaintingMinigame != null)
-        {
-            maskPaintingMinigame.gameObject.SetActive(true);
-            StartCoroutine(DelayedInitialize(maskPaintingMinigame));
-        }
+        DisableAllMinigames();
 
+        switch (name)
+        {
+            case "Carving":
+                carvingMinigame.gameObject.SetActive(true);
+                carvingMinigame.InitializeMinigame();
+                break;
+
+            case "MetalPour":
+                metalPourMinigame.gameObject.SetActive(true);
+                metalPourMinigame.InitializeMinigame();
+                break;
+
+            case "MaskPainting":
+                maskPaintingMinigame.gameObject.SetActive(true);
+                maskPaintingMinigame.InitializeMinigame();
+                break;
+        }
     }
 
-    private IEnumerator DelayedInitialize(MonoBehaviour minigame)
-    {
-        yield return null;
-
-        if (minigame is CarvingMinigame carve)
-            carve.InitializeMinigame();
-        else if (minigame is MetalPourMinigame pour)
-            pour.InitializeMinigame();
-    }
+    // ================= EXIT =================
 
     public void ExitMinigame()
     {
         if (!isMinigameActive) return;
         isMinigameActive = false;
 
-        // Restore player movement
         if (playerMovement != null)
             playerMovement.enabled = true;
 
-        // Hide cursor
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        // Hide minigame canvas
         if (minigameCanvas != null)
             minigameCanvas.SetActive(false);
 
-        // Dezaktywuj wszystkie minigierki
-        if (carvingMinigame != null)
-            carvingMinigame.gameObject.SetActive(false);
-        if (metalPourMinigame != null)
-            metalPourMinigame.gameObject.SetActive(false);
+        DisableAllMinigames();
     }
 
-    public bool IsMinigameActive() => isMinigameActive;
+    void DisableAllMinigames()
+    {
+        carvingMinigame.gameObject.SetActive(false);
+        metalPourMinigame.gameObject.SetActive(false);
+        maskPaintingMinigame.gameObject.SetActive(false);
+    }
+
+    // painting hook
+    // specjalny hook dla painting
+    public void OnPaintingFinished(PaintingTable table)
+    {
+        // uruchomienie Coroutine z aktywnego obiektu (MinigameManager)
+        StartCoroutine(ReenableTableNextFrame(table));
+    }
+
+    private IEnumerator ReenableTableNextFrame(PaintingTable table)
+    {
+        yield return null; // 1 frame opóźnienia
+        table.gameObject.SetActive(true);
+    }
+
+    public bool IsMinigameActive()
+    {
+        return isMinigameActive;
+    }
 }
+
