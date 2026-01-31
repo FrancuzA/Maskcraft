@@ -11,8 +11,18 @@ public class Musicmanager : MonoBehaviour
     }
 
 
-    public void PlaySound()
+    public void PlaySound(EventReference SoundRef)
     {
-
+       EventInstance SoundInst =  CreateInstnace(SoundRef);
+       SoundInst.start();
+       SoundInst.release();
     }
+
+    public EventInstance CreateInstnace(EventReference SoundRef)
+    {
+        EventInstance SoundInstance = RuntimeManager.CreateInstance(SoundRef);
+        return SoundInstance;
+    }
+
+
 }
