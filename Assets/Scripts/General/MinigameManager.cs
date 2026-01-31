@@ -18,6 +18,7 @@ public class MinigameManager : MonoBehaviour
 
     // 0 = Carving, 1 = MetalPour, 2 = Painting
     private int currentStep = 0;
+    public int CurrentStep => currentStep; // public getter
 
     void Awake()
     {
@@ -66,19 +67,19 @@ public class MinigameManager : MonoBehaviour
         {
             case "Carving":
                 carvingMinigame.gameObject.SetActive(true);
-                carvingMinigame.SetResource(GetResourceForMinigame(name)); // ustawia teksturę
+                carvingMinigame.SetResource(GetResourceForMinigame(name));
                 carvingMinigame.InitializeMinigame();
                 break;
 
             case "MetalPour":
                 metalPourMinigame.gameObject.SetActive(true);
-                metalPourMinigame.SetResource(GetResourceForMinigame(name)); // ustawia sprite strumienia
+                metalPourMinigame.SetResource(GetResourceForMinigame(name));
                 metalPourMinigame.InitializeMinigame();
                 break;
 
             case "MaskPainting":
                 maskPaintingMinigame.gameObject.SetActive(true);
-                maskPaintingMinigame.SetResource(GetResourceForMinigame(name)); // ustawia kolor kwiatu
+                maskPaintingMinigame.SetResource(GetResourceForMinigame(name));
                 maskPaintingMinigame.InitializeMinigame();
                 break;
         }
@@ -128,7 +129,7 @@ public class MinigameManager : MonoBehaviour
     }
 
     // ================= Zasoby =================
-    private bool HasRequiredResource(string minigame)
+    public bool HasRequiredResource(string minigame)
     {
         switch (minigame)
         {
@@ -148,7 +149,7 @@ public class MinigameManager : MonoBehaviour
         return false;
     }
 
-    private string GetResourceForMinigame(string minigame)
+    public string GetResourceForMinigame(string minigame)
     {
         switch (minigame)
         {
@@ -166,5 +167,16 @@ public class MinigameManager : MonoBehaviour
                 return "chrysanthemum";
         }
         return null;
+    }
+
+    // ================= PUBLIC WRAPPERS dla PaintingTable =================
+    public bool CanStartPainting()
+    {
+        return currentStep >= 2 && HasRequiredResource("MaskPainting");
+    }
+
+    public string GetAvailableFlower()
+    {
+        return GetResourceForMinigame("MaskPainting");
     }
 }

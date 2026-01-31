@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class PaintingTable : MonoBehaviour, IInteractable
 {
@@ -13,6 +12,23 @@ public class PaintingTable : MonoBehaviour, IInteractable
         if (MinigameManager.Instance == null) return;
         if (MinigameManager.Instance.IsMinigameActive()) return;
 
+        // Sprawdzenie kolejności (czy gracz zrobił carving i metal pour)
+        if (MinigameManager.Instance.CurrentStep < 2)
+        {
+            Debug.LogWarning("Musisz najpierw ukończyć Carving i Metal Pour!");
+            return;
+        }
+
+        // Sprawdzenie, czy gracz ma kwiat w ekwipunku
+        if (!MinigameManager.Instance.HasRequiredResource("MaskPainting"))
+        {
+            Debug.LogWarning("Nie masz żadnego kwiatka w ekwipunku!");
+            return;
+        }
+
+        // Pobierz typ kwiatka
+        string flower = MinigameManager.Instance.GetResourceForMinigame("MaskPainting");
+
         // Spawn maski przed kamerą
         Camera cam = Camera.main;
         Vector3 pos = cam.transform.position + cam.transform.forward * maskDistanceFromCamera;
@@ -20,6 +36,7 @@ public class PaintingTable : MonoBehaviour, IInteractable
 
         currentMaskInstance = Instantiate(maskPrefab, pos, rot);
 
+        // Pobierz minigame i ustaw model maski
         MaskPaintingMinigame minigame = MinigameManager.Instance.maskPaintingMinigame;
         minigame.maskModel = currentMaskInstance.transform;
 
@@ -28,16 +45,19 @@ public class PaintingTable : MonoBehaviour, IInteractable
         PaintablePoint[] found = currentMaskInstance.GetComponentsInChildren<PaintablePoint>();
         minigame.points.AddRange(found);
 
-        Debug.Log("🎯 Found paint points: " + found.Length);
+        // Ustaw kolor kwiatu
+        minigame.SetResource(flower);
 
-        // callback po zakończeniu minigry
+        Debug.Log("🎯 Found paint points: " + found.Length + " | Flower: " + flower);
+
+        // Callback po zakończeniu minigry
         minigame.OnMinigameEnd = OnMinigameEnd;
 
-        // Start minigry
+        // Start minigry przez manager
         MinigameManager.Instance.EnterMinigame("MaskPainting");
         minigame.InitializeMinigame();
 
-        // Wyłącz stół dopiero po tym, jak wszystko jest uruchomione
+        // Wyłącz stół
         gameObject.SetActive(false);
     }
 
