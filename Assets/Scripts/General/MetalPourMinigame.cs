@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using static ResourcesTypes;
 
 public class MetalPourMinigame : MonoBehaviour
 {
     [Header("UI")]
     public RectTransform stream;
-    public RectTransform mold; // kadŸ, któr¹ steruje gracz
+    public RectTransform mold;
     public Image fillBar;
 
     [Header("Stream Sprites")]
@@ -14,19 +15,17 @@ public class MetalPourMinigame : MonoBehaviour
     public Sprite miedzSprite;
 
     [Header("Gameplay")]
-    public float fillSpeed = 0.3f;       // ile wype³nia siê kadŸ na sekundê
-    public float streamAmplitude = 300f; // szerokoœæ ruchu strumienia
-    public float streamSpeed = 400f;     // teraz w pikselach/sekundê, zamiast 2f
-    public float moldSpeed = 500f;       // prêdkoœæ poruszania kadzi¹
-                                         // prêdkoœæ poruszania kadzi¹
+    public float fillSpeed = 0.3f;
+    public float streamAmplitude = 300f;
+    public float streamSpeed = 400f;
+    public float moldSpeed = 500f;
 
     private string currentMetal;
     private bool isPlaying = false;
     private float fillAmount = 0f;
-
     private float streamDirection = 1f;
+    private MetalType usedMetal;
 
-    // ================= INIT =================
     public void SetResource(string metal)
     {
         currentMetal = metal;
@@ -34,10 +33,9 @@ public class MetalPourMinigame : MonoBehaviour
         Image img = stream.GetComponent<Image>();
         switch (metal.ToLower())
         {
-            case "iron": img.sprite = zelazoSprite; break;
-            case "gold": img.sprite = zlotoSprite; break;
-            case "copper": img.sprite = miedzSprite; break;
-            default: Debug.LogWarning("Nieznany metal: " + metal); break;
+            case "iron": img.sprite = zelazoSprite; usedMetal = MetalType.Iron; break;
+            case "gold": img.sprite = zlotoSprite; usedMetal = MetalType.Gold; break;
+            case "copper": img.sprite = miedzSprite; usedMetal = MetalType.Copper; break;
         }
     }
 
@@ -48,13 +46,12 @@ public class MetalPourMinigame : MonoBehaviour
         isPlaying = true;
         streamDirection = 1f;
 
-        // Reset pozycji strumienia i kadzi
         if (stream != null)
             stream.anchoredPosition = new Vector2(0, stream.anchoredPosition.y);
-
         if (mold != null)
             mold.anchoredPosition = new Vector2(0, mold.anchoredPosition.y);
     }
+
     void Update()
     {
         if (!isPlaying) return;
@@ -87,11 +84,10 @@ public class MetalPourMinigame : MonoBehaviour
 
     void MoveMold()
     {
-        float input = Input.GetAxis("Horizontal"); // strza³ki A/D lub lewo/prawo
+        float input = Input.GetAxis("Horizontal");
         Vector2 pos = mold.anchoredPosition;
         pos.x += input * moldSpeed * Time.deltaTime;
 
-        // ograniczenie kadzi w granicach ekranu/rodzica
         float halfWidth = mold.rect.width / 2f;
         float parentHalfWidth = (mold.parent as RectTransform).rect.width / 2f;
         pos.x = Mathf.Clamp(pos.x, -parentHalfWidth + halfWidth, parentHalfWidth - halfWidth);
@@ -101,10 +97,8 @@ public class MetalPourMinigame : MonoBehaviour
 
     void CheckFilling()
     {
-        // sprawdzamy czy kadŸ "³apie" strumieñ
         float streamX = stream.anchoredPosition.x;
         float moldX = mold.anchoredPosition.x;
-
         float moldHalfWidth = mold.rect.width / 2f;
 
         if (streamX >= moldX - moldHalfWidth && streamX <= moldX + moldHalfWidth)
@@ -122,8 +116,27 @@ public class MetalPourMinigame : MonoBehaviour
     {
         isPlaying = false;
         fillBar.fillAmount = 1f;
+
+        MinigameManager.Instance.usedMetal = usedMetal;
+
         Invoke(nameof(ExitMinigame), 1.5f);
     }
+    public void ResetState()
+    {
+        isPlaying = false;
+        fillAmount = 0f;
+        fillBar.fillAmount = 0f;
+
+        if (stream != null)
+            stream.GetComponent<Image>().sprite = null;
+
+        if (stream != null)
+            stream.anchoredPosition = Vector2.zero;
+
+        if (mold != null)
+            mold.anchoredPosition = Vector2.zero;
+    }
+
 
     void ExitMinigame()
     {

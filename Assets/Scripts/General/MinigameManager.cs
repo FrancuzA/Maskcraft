@@ -1,5 +1,8 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
+
+public enum WoodType { Acacia, Willow, Palm }
+public enum MetalType { Iron, Gold, Copper }
+public enum FlowerType { Poppy, Violet, Chrysanthemum }
 
 public class MinigameManager : MonoBehaviour
 {
@@ -14,14 +17,16 @@ public class MinigameManager : MonoBehaviour
     public MetalPourMinigame metalPourMinigame;
     public MaskPaintingMinigame maskPaintingMinigame;
 
-    private bool isMinigameActive = false;
+    // ===== ORDER STATE =====
+    
 
-    // 0 = Carving, 1 = MetalPour, 2 = Painting
+    // ===== PLAYER CRAFT STATE =====
+    public WoodType usedWood;
+    public MetalType usedMetal;
+    public FlowerType usedFlower;
+
     public int CurrentStep { get; private set; } = 0;
-
-    private string usedWood;
-    private string usedMetal;
-    private string usedFlower;
+    private bool isMinigameActive = false;
 
     void Awake()
     {
@@ -38,52 +43,44 @@ public class MinigameManager : MonoBehaviour
     {
         if (isMinigameActive) return;
 
-        // Kolejność
         if ((name == "MetalPour" && CurrentStep < 1) ||
             (name == "MaskPainting" && CurrentStep < 2))
         {
-            Debug.LogWarning("Musisz wykonać poprzednią minigrę!");
+            Debug.Log("Musisz wykonać poprzedni step!");
             return;
         }
 
-        // Zasoby
         if (!HasRequiredResource(name))
         {
-            Debug.LogWarning($"Nie masz wymaganych zasobów do {name}");
+            Debug.Log("Brak zasobów!");
             return;
         }
 
         isMinigameActive = true;
-
-        if (playerMovement != null)
-            playerMovement.enabled = false;
-
+        playerMovement.enabled = false;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-
         minigameCanvas.SetActive(true);
+
         DisableAllMinigames();
 
         switch (name)
         {
             case "Carving":
-                usedWood = GetResourceForMinigame(name);
                 carvingMinigame.gameObject.SetActive(true);
-                carvingMinigame.SetResource(usedWood);
+                carvingMinigame.SetResource(GetResourceForMinigame(name));
                 carvingMinigame.InitializeMinigame();
                 break;
 
             case "MetalPour":
-                usedMetal = GetResourceForMinigame(name);
                 metalPourMinigame.gameObject.SetActive(true);
-                metalPourMinigame.SetResource(usedMetal);
+                metalPourMinigame.SetResource(GetResourceForMinigame(name));
                 metalPourMinigame.InitializeMinigame();
                 break;
 
             case "MaskPainting":
-                usedFlower = GetResourceForMinigame(name);
                 maskPaintingMinigame.gameObject.SetActive(true);
-                maskPaintingMinigame.SetResource(usedFlower);
+                maskPaintingMinigame.SetResource(GetResourceForMinigame(name));
                 maskPaintingMinigame.InitializeMinigame();
                 break;
         }
@@ -92,39 +89,37 @@ public class MinigameManager : MonoBehaviour
     // ================= EXIT =================
     public void ExitMinigame()
     {
-        if (!isMinigameActive) return;
         isMinigameActive = false;
+        CurrentStep++;
 
-        if (playerMovement != null)
-            playerMovement.enabled = true;
-
+        playerMovement.enabled = true;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-
         minigameCanvas.SetActive(false);
         DisableAllMinigames();
 
-        CurrentStep++;
-
-        // JEŚLI skończyliśmy painting → zamykamy cały loop
-        if (CurrentStep > 2)
-            FinishCraftingLoop();
+        Debug.Log("Step: " + CurrentStep);
     }
 
-    void FinishCraftingLoop()
+
+
+    public void ResetLoop()
     {
-        Debug.Log("🎭 Mask completed! Consuming resources & resetting loop.");
-
-        Inventory.instance.ConsumeResource(usedWood);
-        Inventory.instance.ConsumeResource(usedMetal);
-        Inventory.instance.ConsumeResource(usedFlower);
-
-        usedWood = null;
-        usedMetal = null;
-        usedFlower = null;
-
         CurrentStep = 0;
+
+        usedWood = default;
+        usedMetal = default;
+        usedFlower = default;
+
+        
+        metalPourMinigame.ResetState();
+        maskPaintingMinigame.ResetState();
+
+        Debug.Log("🔄 FULL RESET craftingu");
     }
+
+
+
 
     void DisableAllMinigames()
     {
@@ -134,6 +129,17 @@ public class MinigameManager : MonoBehaviour
     }
 
     public bool IsMinigameActive() => isMinigameActive;
+
+    // ================= ORDER =================
+
+    public bool IsOrderCorrect()
+    {
+        return usedWood == OrderSystem.Instance.currentWood &&
+               usedMetal == OrderSystem.Instance.currentMetal &&
+               usedFlower == OrderSystem.Instance.currentFlower;
+    }
+
+
 
     // ================= ZASOBY =================
     public bool HasRequiredResource(string minigame)

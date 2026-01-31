@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+using static ResourcesTypes;
 
 public class CarvingMinigame : MonoBehaviour
 {
@@ -21,8 +22,9 @@ public class CarvingMinigame : MonoBehaviour
     private int totalMaskPixels = 0;
     private bool hasWon = false;
     private bool isInitialized = false;
+    private Texture2D maskReference;
+    private WoodType currentWood;
 
-    // ================= INIT =================
     public void SetResource(string resource)
     {
         switch (resource)
@@ -30,22 +32,20 @@ public class CarvingMinigame : MonoBehaviour
             case "acacia":
                 maskReference = maskReferenceAkacja;
                 maskGuide.texture = maskReferenceAkacja;
+                currentWood = WoodType.Acacia;
                 break;
-
             case "willow":
                 maskReference = maskReferenceWierzba;
                 maskGuide.texture = maskReferenceWierzba;
+                currentWood = WoodType.Willow;
                 break;
-
             case "palm":
                 maskReference = maskReferencePalma;
                 maskGuide.texture = maskReferencePalma;
+                currentWood = WoodType.Palm;
                 break;
         }
     }
-
-
-    private Texture2D maskReference;
 
     public void InitializeMinigame()
     {
@@ -92,7 +92,6 @@ public class CarvingMinigame : MonoBehaviour
     void DrawBrush(int centerX, int centerY)
     {
         int radius = Mathf.FloorToInt(brushSize / 2);
-
         for (int y = -radius; y <= radius; y++)
         {
             for (int x = -radius; x <= radius; x++)
@@ -106,7 +105,6 @@ public class CarvingMinigame : MonoBehaviour
                 drawTexture.SetPixel(px, py, Color.white);
             }
         }
-
         drawTexture.Apply(false);
     }
 
@@ -128,6 +126,10 @@ public class CarvingMinigame : MonoBehaviour
     {
         hasWon = true;
         similarityText.text = "✅ COMPLETE";
+
+        // zapisujemy użyty wood do MinigameManager
+        MinigameManager.Instance.usedWood = currentWood;
+
         Invoke(nameof(ExitMinigame), 1.5f);
     }
 

@@ -1,7 +1,8 @@
-﻿using UnityEngine;
-using TMPro;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using static ResourcesTypes;
 
 public class MaskPaintingMinigame : MonoBehaviour
 {
@@ -15,20 +16,23 @@ public class MaskPaintingMinigame : MonoBehaviour
     public float manualRotationSpeed = 50f;
 
     private bool isInitialized = false;
-    private Color flowerColor = Color.green;
+    private FlowerType usedFlower;
 
-    public Action OnMinigameEnd; // callback dla PaintingTable
+    public Action OnMinigameEnd;
 
-    // ================= INIT =================
     public void SetResource(string flower)
     {
-        // ustawiamy kolor wszystkich punktów w zależności od kwiatu
         foreach (var p in points)
-        {
-            p.SetFlowerColor(flower); // <- teraz ustawiamy publiczną metodą
-        }
-    }
+            p.SetFlowerColor(flower);
 
+        usedFlower = flower switch
+        {
+            "poppy" => FlowerType.Poppy,
+            "violet" => FlowerType.Violet,
+            "chrysanthemum" => FlowerType.Chrysanthemum,
+            _ => FlowerType.Poppy
+        };
+    }
 
     public void InitializeMinigame()
     {
@@ -81,8 +85,25 @@ public class MaskPaintingMinigame : MonoBehaviour
             if (!p.isPainted) return;
 
         isInitialized = false;
+
+        // zapisujemy użyty flower
+        MinigameManager.Instance.usedFlower = usedFlower;
+
         OnMinigameEnd?.Invoke();
     }
+    public void ResetState()
+    {
+        isInitialized = false;
+
+        foreach (var p in points)
+            p.ResetPoint();
+
+        if (maskModel != null)
+            maskModel.rotation = Quaternion.identity;
+
+        UpdateProgressText();
+    }
+
 
     void UpdateProgressText()
     {
