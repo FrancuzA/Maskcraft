@@ -8,14 +8,24 @@ public class PlayerMovement : MonoBehaviour
     public float sprintMultiplier = 1.8f;
     public float jumpHeight = 1.5f;
     public float gravity = -9.81f;
+    public float distToGround;
+    public Animator WalkAnim;
 
     [Header("Look")]
     public Transform cameraTransform;
     public float mouseSensitivity = 600f;
 
+    [Header("Hand")]
+    public GameObject handParent;
+    public GameObject axePref;
+    public GameObject pickaxePref;
+    public string currentItem = null;
+
     private CharacterController controller;
     private Vector3 velocity;
     private float xRotation = 0f;
+
+
 
     void Awake()
     {
@@ -55,8 +65,13 @@ public class PlayerMovement : MonoBehaviour
     {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
+        float speed = moveSpeed;
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            speed = moveSpeed * sprintMultiplier;
+        }
 
-        float speed = Input.GetKey(KeyCode.LeftShift) ? moveSpeed * sprintMultiplier : moveSpeed;
+        speed = moveSpeed * sprintMultiplier;
 
         Vector3 move = transform.right * x + transform.forward * z;
         controller.Move(move * speed * Time.fixedDeltaTime);
@@ -82,6 +97,26 @@ public class PlayerMovement : MonoBehaviour
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            currentItem = null;
+            handParent.transform.DestroyAllChildren();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            currentItem = "axe";
+            handParent.transform.DestroyAllChildren();
+            Instantiate(axePref, handParent.transform.position, Quaternion.identity, handParent.transform);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            currentItem = "pickaxe";
+            handParent.transform.DestroyAllChildren();
+            Instantiate(pickaxePref, handParent.transform.position, Quaternion.identity, handParent.transform);
+        }
     }
 
 
@@ -97,4 +132,13 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(gravityMove);
     }
 
+    public void TakeStep()
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, distToGround + 0.5f))
+        {
+            string GroundType = hit.collider.tag;
+        }
+    }
 }

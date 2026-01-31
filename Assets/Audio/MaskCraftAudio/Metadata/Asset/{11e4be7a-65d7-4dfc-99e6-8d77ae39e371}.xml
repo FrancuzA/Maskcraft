@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="EncodableAsset" id="{11e4be7a-65d7-4dfc-99e6-8d77ae39e371}">
+		<property name="assetPath">
+			<value>Brush/</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{be9a9105-2579-41cd-8964-3cc3465e77d3}</destination>
+		</relationship>
+	</object>
+</objects>
