@@ -18,37 +18,31 @@ public class Interactor : MonoBehaviour
     {
         if (transform.rotation != lastRotation)
         {
-            RotationChanged();
             lastRotation = transform.rotation;
         }
 
         if (Input.GetKey(KeyCode.Mouse0) && interactableInRange)
         {
-            Debug.Log("trying to interact");
-            interactable.Interact();
+            if(interactable != null)
+                interactable.Interact();
         }
 
     }
 
-    private void RotationChanged()
+
+
+    private void FixedUpdate()
     {
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hitInfo, interactRange))
         {
-            Debug.Log("something in range");
             if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj))
             {
-                Debug.Log("interactable in range");
                 interactable = interactObj;
                 interactableInRange = true;
-                CheckIfStillExist();
             }
             else { interactableInRange = false; }
         }
         else { interactableInRange = false; }
     }
 
-    private void CheckIfStillExist()
-    {
-        if (interactable == null) interactableInRange = false;
-    }
 }

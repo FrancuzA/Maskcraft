@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+        Dependencies.Instance.RegisterDependency<PlayerMovement>(this);
         controller = GetComponent<CharacterController>();
 
         Cursor.lockState = CursorLockMode.Locked;

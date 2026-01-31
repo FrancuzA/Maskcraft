@@ -3,13 +3,17 @@ using UnityEngine;
 
 public class TreeScript : MonoBehaviour, IInteractable
 {
-    private int treeHP = 100;
+    private int currentHp;
+    public int treeHP = 100;
+    public int damage = 10;
     private TreeStump treeStump;
     public float treeSize;
+    public int treeValue = 5;
+    public string woodType;
 
     private void Start()
     {
-        treeHP = 100;
+        currentHp = treeHP;
         if (Physics.Raycast(gameObject.transform.position, Vector3.down, out RaycastHit hitInfo, treeSize/2))
         {
             if (hitInfo.collider.gameObject.TryGetComponent(out TreeStump stump))
@@ -30,9 +34,8 @@ public class TreeScript : MonoBehaviour, IInteractable
 
     private void DamageTree()
     {
-        Debug.Log("tree hit");
-        treeHP -= 10;
-        if (treeHP <= 0)
+        currentHp -= damage;
+        if (currentHp <= 0)
         {
             InformStump();
             
@@ -41,8 +44,14 @@ public class TreeScript : MonoBehaviour, IInteractable
 
     private void InformStump()
     {
-        Debug.Log("stump informed");
+        AddResources();
         treeStump.StartGrowingTree();
         gameObject.SetActive(false);
+    }
+
+    private void AddResources()
+    {
+        int amountToSet = treeValue + Inventory.instance.GetResources(woodType);
+        Inventory.instance.SetResources(woodType,amountToSet);
     }
 }
