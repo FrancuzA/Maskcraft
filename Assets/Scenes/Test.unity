@@ -278,11 +278,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 851556204}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &185338481 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1306950003666573328, guid: 9e55c3ab40de608498fbcbb342e749ad, type: 3}
-  m_PrefabInstance: {fileID: 1586432546783669157}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &185338486 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2598860979418362094, guid: 9e55c3ab40de608498fbcbb342e749ad, type: 3}
@@ -1003,7 +998,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a3545312180ef841ac7a8b9a18853ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maskPrefab: {fileID: 185338481}
+  maskPrefab: {fileID: 1306950003666573328, guid: 9e55c3ab40de608498fbcbb342e749ad, type: 3}
   maskDistanceFromCamera: 1
 --- !u!65 &879962046
 BoxCollider:
