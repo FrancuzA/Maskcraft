@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.03.00">
 	<object class="AudioFile" id="{1c4c2efd-5bcd-4690-9683-751083c3ceaf}">
 		<property name="assetPath">
-			<value>MaskCraft_Main - FunkyTrumpet.wav</value>
+			<value>Music/MaskCraft_Main - FunkyTrumpet.wav</value>
 		</property>
 		<property name="frequencyInKHz">
 			<value>44.0999985</value>

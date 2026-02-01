@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.03.00">
 	<object class="AudioFile" id="{39eca70a-c52a-489f-99be-f9d878982452}">
 		<property name="assetPath">
-			<value>MaskCraft_Main - FunkyCymbals.wav</value>
+			<value>Music/MaskCraft_Main - FunkyCymbals.wav</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>

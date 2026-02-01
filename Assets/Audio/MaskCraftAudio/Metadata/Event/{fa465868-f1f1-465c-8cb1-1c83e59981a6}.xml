@@ -5,7 +5,7 @@
 			<value>StoneBreaking</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{d17b1749-fd49-4e22-8cb8-28a133d25ebb}</destination>
@@ -118,7 +118,6 @@
 	<object class="MixerBusEffectChain" id="{ff5351ad-15c2-4de3-9a90-37f9d5ff3b02}">
 		<relationship name="effects">
 			<destination>{e8b350e6-a821-4e01-b5bc-5c2097ad1221}</destination>
-			<destination>{1d9b9985-2487-4755-b745-3d22af4f9510}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{a4ae78de-e2cd-46fe-8ac9-e27ab0ee8b8c}" />
@@ -160,6 +159,5 @@
 	</object>
 	<object class="MixerBusPanner" id="{b9908ec2-c478-4ad5-8269-81256e2f455a}" />
 	<object class="MixerBusFader" id="{e8b350e6-a821-4e01-b5bc-5c2097ad1221}" />
-	<object class="SpatialiserEffect" id="{1d9b9985-2487-4755-b745-3d22af4f9510}" />
 	<object class="MixerBusFader" id="{f1dcb862-9351-4b77-beb5-474a382bd406}" />
 </objects>

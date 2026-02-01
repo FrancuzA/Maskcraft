@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="DataFile" id="{359b3b48-1ac2-4c8e-891c-073be4af0ffa}">
+		<property name="assetPath">
+			<value>Dialogi/dialog9.m4a</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{be9a9105-2579-41cd-8964-3cc3465e77d3}</destination>
+		</relationship>
+	</object>
+</objects>

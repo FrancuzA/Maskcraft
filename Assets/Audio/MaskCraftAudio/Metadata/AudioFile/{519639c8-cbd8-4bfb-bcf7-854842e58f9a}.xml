@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.03.00">
 	<object class="AudioFile" id="{519639c8-cbd8-4bfb-bcf7-854842e58f9a}">
 		<property name="assetPath">
-			<value>MaskCraft_Main - Tamburyny.wav</value>
+			<value>Music/MaskCraft_Main - Tamburyny.wav</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>
