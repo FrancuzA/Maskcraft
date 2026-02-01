@@ -15,6 +15,7 @@ public class OrderSystem : MonoBehaviour
     {
         Dependencies.Instance.RegisterDependency<OrderSystem>(this);
         currentOrderList = Dependencies.Instance.GetDependancy<OrderList>();
+        GetNextOrder();
     }
 
     public void GetNextOrder()

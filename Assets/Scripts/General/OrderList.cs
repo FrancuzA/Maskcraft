@@ -7,8 +7,9 @@ public class OrderList : MonoBehaviour
 {
     public List<OrderText> orders = new List<OrderText>();
 
-    private void Start()
+    private void Awake()
     {
         Dependencies.Instance.RegisterDependency<OrderList>(this);
     }
+
 }

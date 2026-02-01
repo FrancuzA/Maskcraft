@@ -18,14 +18,11 @@ public class OrderLetterUI : MonoBehaviour
     void Awake()
     {
         Dependencies.Instance.RegisterDependency<OrderLetterUI>(this);
-    
-
     }
 
 
     void Update()
     {
-        // Debug: Show when TAB is pressed
         if (Input.GetKeyDown(toggleKey))
         {
 
@@ -69,7 +66,8 @@ public class OrderLetterUI : MonoBehaviour
     {
 
         OrderSystem o = Dependencies.Instance.GetDependancy<OrderSystem>();
-        letterText.text = $"NEW ORDER <br> {o.currentMessage}";
+        Debug.Log(o.currentMessage);
+        letterText.text = $"{o.currentMessage}";
 
         panel.SetActive(true);
         isUIOpen = true;

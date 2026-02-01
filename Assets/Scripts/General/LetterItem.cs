@@ -17,12 +17,10 @@ public class LetterItem : MonoBehaviour, IInteractable
             (letterCollider as BoxCollider).isTrigger = true;
         }
         Dependencies.Instance.GetDependancy<OrderSystem>();
-        Debug.Log("📮 Letter spawned at " + transform.position);
     }
 
     void Update()
     {
-        // Optional: Float animation or glow effect
         FloatAnimation();
     }
 
@@ -51,7 +49,7 @@ public class LetterItem : MonoBehaviour, IInteractable
     void CollectLetter()
     {
         isCollected = true;
-        Dependencies.Instance.GetDependancy<OrderLetterUI>().hasLetter = true;
+        Dependencies.Instance.GetDependancy<OrderLetterUI>().SetHasLetter(true);
 
         Destroy(gameObject);
     }
