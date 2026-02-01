@@ -13,23 +13,22 @@ public class OrderLetterUI : MonoBehaviour
     [SerializeField] private KeyCode toggleKey = KeyCode.Tab;
 
     private bool isUIOpen = false;
-    private bool hasLetter = false;
+    public bool hasLetter = false;
 
     void Awake()
     {
-        if (Instance != null && Instance != this)
-            Destroy(gameObject);
-        else
-            Instance = this;
+        Dependencies.Instance.RegisterDependency<OrderLetterUI>(this);
+    
 
-        panel.SetActive(false);
     }
+
 
     void Update()
     {
-        // Toggle letter UI with TAB
+        // Debug: Show when TAB is pressed
         if (Input.GetKeyDown(toggleKey))
         {
+
             if (hasLetter && !isUIOpen)
             {
                 ShowLetter();
@@ -38,6 +37,7 @@ public class OrderLetterUI : MonoBehaviour
             {
                 CloseLetter();
             }
+        
         }
 
         // Auto-close if player no longer has a letter
@@ -51,65 +51,48 @@ public class OrderLetterUI : MonoBehaviour
     public void SetHasLetter(bool has)
     {
         hasLetter = has;
-
+      
         if (!has && isUIOpen)
         {
             CloseLetter();
         }
 
-        Debug.Log($"📬 Player {(has ? "now has" : "no longer has")} a letter");
+        // If we now have a letter and panel is open but shouldn't be, close it
+        if (has && isUIOpen && panel != null && panel.activeSelf)
+        {
+            
+            ShowLetter(); // This will properly set up the letter text
+        }
     }
 
     public void ShowLetter()
     {
-        if (!OrderSystem.Instance.hasActiveOrder || !hasLetter)
-            return;
 
-        var o = OrderSystem.Instance;
+        OrderSystem o = Dependencies.Instance.GetDependancy<OrderSystem>();
+        letterText.text = $"NEW ORDER <br> {o.currentMessage}";
 
-        letterText.text = FormatOrderText(o.currentWood, o.currentMetal, o.currentFlower);
         panel.SetActive(true);
         isUIOpen = true;
 
-        // Optional: Pause game
+        // Pause game
         Time.timeScale = 0f;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-
-        Debug.Log("📄 Letter UI shown (TAB)");
     }
 
     public void CloseLetter()
     {
-        panel.SetActive(false);
+        if (!isUIOpen) return;
+
+        if (panel != null)
+        {
+            panel.SetActive(false);
+        }
         isUIOpen = false;
 
         // Resume game
         Time.timeScale = 1f;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-
-        Debug.Log("📄 Letter UI closed");
-    }
-
-    string FormatOrderText(WoodType wood, MetalType metal, FlowerType flower)
-    {
-        return $@"Dear Mask Maker,
-
-I would like to order a ceremonial mask made of:
-
-Wood: {wood}
-Metal: {metal}
-Flower: {flower}
-
-Sincerely,
-A Mysterious Client";
-    }
-
-    // Quick method to check if player can read letter
-    public bool CanReadLetter()
-    {
-        return hasLetter && OrderSystem.Instance.hasActiveOrder;
     }
 }
-

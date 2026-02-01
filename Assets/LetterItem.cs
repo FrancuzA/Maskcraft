@@ -7,7 +7,7 @@ public class LetterItem : MonoBehaviour, IInteractable
 
     private bool isCollected = false;
     private Collider letterCollider;
-
+    private OrderSystem orderSystem;
     void Start()
     {
         letterCollider = GetComponent<Collider>();
@@ -16,7 +16,7 @@ public class LetterItem : MonoBehaviour, IInteractable
             letterCollider = gameObject.AddComponent<BoxCollider>();
             (letterCollider as BoxCollider).isTrigger = true;
         }
-
+        Dependencies.Instance.GetDependancy<OrderSystem>();
         Debug.Log("📮 Letter spawned at " + transform.position);
     }
 
@@ -51,30 +51,9 @@ public class LetterItem : MonoBehaviour, IInteractable
     void CollectLetter()
     {
         isCollected = true;
+        Dependencies.Instance.GetDependancy<OrderLetterUI>().hasLetter = true;
 
-        // 1. Tell OrderLetterUI that player now has a letter
-        OrderLetterUI.Instance.SetHasLetter(true);
-
-        // 2. Make sure OrderSystem has an active order
-        if (!OrderSystem.Instance.hasActiveOrder)
-        {
-            Debug.LogError("❌ Letter collected but no active order in OrderSystem!");
-        }
-
-        Debug.Log("📬 Letter collected! Press TAB to read.");
-
-        // 3. Destroy the physical letter
         Destroy(gameObject);
     }
 
-    // Visual feedback
-    void OnMouseEnter()
-    {
-        // Optional: Highlight effect
-    }
-
-    void OnMouseExit()
-    {
-        // Optional: Remove highlight
-    }
 }

@@ -24,7 +24,9 @@ public class Musicmanager : MonoBehaviour
     {
        EventInstance SoundInstance = RuntimeManager.CreateInstance(SoundRef);
        Debug.Log(SoundInstance.isValid());
-       SoundInstance.start();
+
+        RuntimeManager.AttachInstanceToGameObject(SoundInstance, playerTransform.gameObject);
+        SoundInstance.start();
        SoundInstance.release();
     }
 

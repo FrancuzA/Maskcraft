@@ -17,7 +17,7 @@ public class TreeScript : MonoBehaviour, IInteractable
     private void Start()
     {
         currentHp = treeHP;
-        if (Physics.Raycast(gameObject.transform.position, Vector3.down, out RaycastHit hitInfo, treeSize/2))
+        if (Physics.Raycast(gameObject.transform.position, Vector3.down, out RaycastHit hitInfo, treeSize))
         {
             if (hitInfo.collider.gameObject.TryGetComponent(out TreeStump stump))
             {
