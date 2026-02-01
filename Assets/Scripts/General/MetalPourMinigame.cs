@@ -8,6 +8,7 @@ public class MetalPourMinigame : MonoBehaviour
     public RectTransform stream;
     public RectTransform mold;
     public Image fillBar;
+    //public Sprite winSpirte;
 
     [Header("Stream Sprites")]
     public Sprite zelazoSprite;

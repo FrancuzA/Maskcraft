@@ -181,8 +181,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4286287389864118272}
-  - component: {fileID: 6209246297953264667}
-  - component: {fileID: 4377846670100585590}
+  - component: {fileID: 2850876541553050295}
+  - component: {fileID: 7874680506105671588}
   m_Layer: 0
   m_Name: bird_4
   m_TagString: Untagged
@@ -208,28 +208,7 @@ Transform:
   - {fileID: 7709708578841671833}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6209246297953264667
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7629426510419448801}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1dea15b1c59c9a46b04a3b52c7a9f33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  owlAnimator: {fileID: 4377846670100585590}
-  letterPrefab: {fileID: 692415041088831414, guid: e5a34fb197d1faf4c877df457629354d, type: 3}
-  scream:
-    Guid:
-      Data1: -1851648678
-      Data2: 1258549893
-      Data3: 699769772
-      Data4: -1488088828
-    Path: event:/BirdScream
---- !u!95 &4377846670100585590
+--- !u!95 &2850876541553050295
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
@@ -251,6 +230,27 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7874680506105671588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7629426510419448801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1dea15b1c59c9a46b04a3b52c7a9f33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owlAnimator: {fileID: 2850876541553050295}
+  letterPrefab: {fileID: 692415041088831414, guid: e5a34fb197d1faf4c877df457629354d, type: 3}
+  scream:
+    Guid:
+      Data1: -1851648678
+      Data2: 1258549893
+      Data3: 699769772
+      Data4: -1488088828
+    Path: event:/BirdScream
 --- !u!1 &7685304493391770938
 GameObject:
   m_ObjectHideFlags: 0
