@@ -28,6 +28,7 @@ public class TreeScript : MonoBehaviour, IInteractable
         {
             Debug.Log("no stump found");
         }
+        musicManager = Dependencies.Instance.GetDependancy<Musicmanager>();
     }
 
     public void Interact()
