@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e723b6a8258934541a8650af84102a96, type: 3}
+  m_Name: OrderInfo 7
+  m_EditorClassIdentifier: 
+  Message: "Dzie\u0144 dobry\u2026 Chcia\u0142bym sprawi\u0107 mojej babci rado\u015B\u0107
+    i pom\xF3c jej cieszy\u0107 si\u0119 \u017Cyciem ka\u017Cdego dnia. Potrzebuj\u0119
+    maski rado\u015Bci \u2014 takiej, kt\xF3ra promieniuje szcz\u0119\u015Bciem z
+    ka\u017Cdej cz\u0119\u015Bci jej cia\u0142a. Moja babcia jest twarda, wi\u0119c
+    nie musisz robi\u0107 maski lekkiej \u2014 standardowa b\u0119dzie w sam raz.
+    Dzi\u0119kuj\u0119, prosz\u0119, zr\xF3b j\u0105 najlepiej, jak potrafisz; chc\u0119,
+    \u017Ceby wywo\u0142a\u0142a u\u015Bmiech na jej twarzy. "
+  woodType: 2
+  metalType: 2
+  flowerType: 2

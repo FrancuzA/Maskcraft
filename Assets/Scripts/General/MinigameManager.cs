@@ -30,12 +30,8 @@ public class MinigameManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+      Dependencies.Instance.RegisterDependency<MinigameManager>(this);
+
     }
 
     // ================= ENTER =================
@@ -82,6 +78,7 @@ public class MinigameManager : MonoBehaviour
                 maskPaintingMinigame.gameObject.SetActive(true);
                 maskPaintingMinigame.SetResource(GetResourceForMinigame(name));
                 maskPaintingMinigame.InitializeMinigame();
+                
                 break;
         }
     }

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e723b6a8258934541a8650af84102a96, type: 3}
+  m_Name: OrderInfo 3
+  m_EditorClassIdentifier: 
+  Message: " Och\u2026 Witaj, pisz\u0119 ten list z pro\u015Bb\u0105. O pot\u0119\u017Cny
+    Ksi\u0119\u017Cycu\u2026 pom\xF3\u017C mi\u2026 pom\xF3\u017C mi ujrze\u0107
+    moje gwiazdy!! Pracuj\u0119 nad tym od tygodni\u2026 NIE! Miesi\u0119cy. Potrzebuj\u0119
+    maski\u2026 Maski z moc\u0105, jak\u0105 dzier\u017Cy \u015Bwit\u2026 moc\u0105
+    blasku\u2026 Musi mie\u0107 tak\u017Ce mas\u0119 tysi\u0105ca s\u0142o\u0144c\u2026
+    I pami\u0119taj\u2026 Chc\u0119 poczu\u0107 jej moc w ca\u0142ym ciele\u2026
+    CA\u0141YM! Rozumiesz\u2026 G\u0142upcze? Nigdy nie zrozumiesz majestatu tych
+    wszystkich cud\xF3w nieba\u2026 Prosz\u0119 ci\u0119 wi\u0119c\u2026 Zap\u0142ac\u0119
+    ka\u017Cd\u0105 cen\u0119\u2026 tylko po to, by zdoby\u0107 mask\u0119, kt\xF3ra
+    utoruje drog\u0119 do mojej mi\u0142o\u015Bci"
+  woodType: 0
+  metalType: 2
+  flowerType: 2

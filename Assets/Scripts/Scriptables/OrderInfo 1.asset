@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e723b6a8258934541a8650af84102a96, type: 3}
+  m_Name: OrderInfo 1
+  m_EditorClassIdentifier: 
+  Message: "Dzie\u0144 dobry\u2026 Bardzo przepraszam, \u017Ce wysy\u0142am ten list\u2026
+    Potrzebuj\u0119 pomocy. Moja niegrzeczna Dem\u2026 moja c\xF3rka, sprawia mi
+    prawdziwe problemy. Potrzebuj\u0119 maski z najtwardszego drewna, najlepiej akacji.
+    I niech b\u0119dzie niebieska\u2026 Magia wody powinna j\u0105 uspokoi\u0107.
+    Ale pami\u0119taj, \u017Ceby doda\u0107 \u017Celazo\u2026 Chc\u0119, \u017Ceby
+    nie by\u0142a w stanie \u0142atwo zniszczy\u0107 tej maski. Z g\xF3ry dzi\u0119kuj\u0119
+    za pomoc w poradzeniu sobie z tym \u0142obuzem. "
+  woodType: 0
+  metalType: 0
+  flowerType: 1

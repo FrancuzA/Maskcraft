@@ -26,6 +26,12 @@ public class MetalPourMinigame : MonoBehaviour
     private float streamDirection = 1f;
     private MetalType usedMetal;
 
+    private MinigameManager minigameManager;
+    private void Start()
+    {
+        minigameManager = Dependencies.Instance.GetDependancy<MinigameManager>();
+    }
+
     public void SetResource(string metal)
     {
         currentMetal = metal;
@@ -117,7 +123,7 @@ public class MetalPourMinigame : MonoBehaviour
         isPlaying = false;
         fillBar.fillAmount = 1f;
 
-        MinigameManager.Instance.usedMetal = usedMetal;
+        minigameManager.usedMetal = usedMetal;
 
         Invoke(nameof(ExitMinigame), 1.5f);
     }
@@ -140,6 +146,6 @@ public class MetalPourMinigame : MonoBehaviour
 
     void ExitMinigame()
     {
-        MinigameManager.Instance.ExitMinigame();
+      minigameManager.ExitMinigame();
     }
 }

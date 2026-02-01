@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e723b6a8258934541a8650af84102a96, type: 3}
+  m_Name: OrderInfo 18
+  m_EditorClassIdentifier: 
+  Message: "Zwracamy si\u0119 z pro\u015Bb\u0105 o stworzenie maski o wadz\u0119
+    \u0107wier\u0107 tony, kt\xF3ra b\u0119dzie posiada\u0107 zdolno\u015B\u0107
+    wyzwalania ciep\u0142a, kt\xF3re mo\u017Cna skierowa\u0107 na wrog\xF3w. Najwa\u017Cniejsze,
+    by by\u0142a wytrzyma\u0142a i wysokiej jako\u015Bci. Uprzejmie prosimy o dostarczenie
+    prototypu tak szybko, jak to mo\u017Cliwe.  Z wyrazami szacunku, Genera\u0142
+    Makshimoho "
+  woodType: 0
+  metalType: 0
+  flowerType: 0

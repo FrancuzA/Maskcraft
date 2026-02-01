@@ -13,21 +13,18 @@ public class TreeScript : MonoBehaviour, IInteractable
     public string woodType;
     private Musicmanager musicManager;
     public EventReference  cuttingSound;
-
     private void Start()
     {
         currentHp = treeHP;
-        if (Physics.Raycast(gameObject.transform.position, Vector3.down, out RaycastHit hitInfo, treeSize/2))
+
+        // Zamiast Raycasta, który nie trafia w krzywe drzewa:
+        treeStump = GetComponentInParent<TreeStump>();
+
+        if (treeStump == null)
         {
-            if (hitInfo.collider.gameObject.TryGetComponent(out TreeStump stump))
-            {
-                treeStump= stump;
-            }
+            Debug.LogError("B£¥D: Nie znaleziono TreeStump u rodzica obiektu: " + gameObject.name);
         }
-        else
-        {
-            Debug.Log("no stump found");
-        }
+
         musicManager = Dependencies.Instance.GetDependancy<Musicmanager>();
     }
 

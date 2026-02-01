@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e723b6a8258934541a8650af84102a96, type: 3}
+  m_Name: OrderInfo 14
+  m_EditorClassIdentifier: 
+  Message: "D-dobry wiecz\xF3r! Mam na imi\u0119 Oskar i\u2026 chcia\u0142bym kupi\u0107
+    mask\u0119\u2026 mask\u0119, kt\xF3ra sprawi, \u017Ce poczuj\u0119 si\u0119 jak
+    kto\u015B odwa\u017Cny\u2026 Chcia\u0142bym, \u017Ceby mia\u0142a w sobie ogie\u0144\u2026
+    \u017Cebym m\xF3g\u0142 poczu\u0107 go p\xF3\u017Aniej w sobie, ale ca\u0142ym
+    sob\u0105\u2026  Prosz\u0119, tylko upewnij si\u0119, \u017Ce maska nie b\u0119dzie
+    za lekka, bo kto\u015B mo\u017Ce mi j\u0105 zabra\u0107\u2026 a tak\u017Ce nie
+    za ci\u0119\u017Cka, bo mog\u0142aby uszkodzi\u0107 moje okulary\u2026 Przepraszam
+    jeszcze raz\u2026 Mi\u0142ego wieczoru\u2026"
+  woodType: 2
+  metalType: 2
+  flowerType: 0

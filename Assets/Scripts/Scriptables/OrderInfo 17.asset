@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e723b6a8258934541a8650af84102a96, type: 3}
+  m_Name: OrderInfo 17
+  m_EditorClassIdentifier: 
+  Message: "Dobry wiecz\xF3r. Nazywam si\u0119 Dick Dickenson\u2026 Potrzebowa\u0142bym
+    czego\u015B, co mog\u0142oby pom\xF3c mi w mojej pracy. Czego\u015B, co pozwoli\u0142oby
+    mi skuteczniej gasi\u0107 po\u017Cary\u2026 i co jest trwa\u0142e oraz ma standardow\u0105
+    wag\u0119. Dzi\u0119kuj\u0119 za pomoc."
+  woodType: 2
+  metalType: 0
+  flowerType: 1

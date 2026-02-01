@@ -5,53 +5,92 @@ public class OrderLetterUI : MonoBehaviour
 {
     public static OrderLetterUI Instance;
 
+    [Header("UI References")]
     public GameObject panel;
     public TMP_Text letterText;
 
+    [Header("Settings")]
+    [SerializeField] private KeyCode toggleKey = KeyCode.Tab;
+
+    private bool isUIOpen = false;
+    public bool hasLetter = false;
+
     void Awake()
     {
-        Instance = this;
-        panel.SetActive(false);
+        Dependencies.Instance.RegisterDependency<OrderLetterUI>(this);
+    }
+
+
+    void Update()
+    {
+        if (Input.GetKeyDown(toggleKey))
+        {
+
+            if (hasLetter && !isUIOpen)
+            {
+                ShowLetter();
+            }
+            else if (isUIOpen)
+            {
+                CloseLetter();
+            }
+        
+        }
+
+        // Auto-close if player no longer has a letter
+        if (isUIOpen && !hasLetter)
+        {
+            CloseLetter();
+        }
+    }
+
+    // Called when owl delivers a letter or player picks one up
+    public void SetHasLetter(bool has)
+    {
+        hasLetter = has;
+      
+        if (!has && isUIOpen)
+        {
+            CloseLetter();
+        }
+
+        // If we now have a letter and panel is open but shouldn't be, close it
+        if (has && isUIOpen && panel != null && panel.activeSelf)
+        {
+            
+            ShowLetter(); // This will properly set up the letter text
+        }
     }
 
     public void ShowLetter()
     {
-        if (!OrderSystem.Instance.hasActiveOrder)
-            return;
 
-        var o = OrderSystem.Instance;
-
-        letterText.text =
-    $@"Dear Mask Maker,
-
-I would like to order a ceremonial mask made of:
-
-Wood: {o.currentWood}
-Metal: {o.currentMetal}
-Flower: {o.currentFlower}
-
-Sincerely,
-A Mysterious Client";
+        OrderSystem o = Dependencies.Instance.GetDependancy<OrderSystem>();
+        Debug.Log(o.currentMessage);
+        letterText.text = $"{o.currentMessage}";
 
         panel.SetActive(true);
+        isUIOpen = true;
 
-         Time.timeScale = 0f;
+        // Pause game
+        Time.timeScale = 0f;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-
-        Debug.Log("📄 Letter UI shown");
     }
 
     public void CloseLetter()
     {
-        panel.SetActive(false);
+        if (!isUIOpen) return;
 
-      Time.timeScale = 1f; 
+        if (panel != null)
+        {
+            panel.SetActive(false);
+        }
+        isUIOpen = false;
+
+        // Resume game
+        Time.timeScale = 1f;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-
-        Debug.Log("📄 Letter UI closed");
     }
-
-
 }

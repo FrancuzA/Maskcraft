@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +13,7 @@ public class TreeStump : MonoBehaviour
     public void CreateNewTree()
     {
         transform.DestroyAllChildren();
-        Instantiate(treeBody, transform.position + treeSpawnOffset, Quaternion.identity, gameObject.transform);
+        Instantiate(treeBody, transform.position + treeSpawnOffset, transform.rotation, gameObject.transform);
         isGrowwingNewTree = false;
     }
 

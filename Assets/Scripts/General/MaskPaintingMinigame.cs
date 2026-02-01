@@ -13,6 +13,7 @@ public class MaskPaintingMinigame : MonoBehaviour
     public List<PaintablePoint> points = new List<PaintablePoint>();
     public TMP_Text progressText;
     public EventReference brushSound;
+    
     [Header("Rotation")]
     public float autoRotationSpeed = 20f;
     public float manualRotationSpeed = 50f;
@@ -22,9 +23,13 @@ public class MaskPaintingMinigame : MonoBehaviour
     private Musicmanager musicManager;
     public Action OnMinigameEnd;
 
+    MinigameManager minigameManager;
+
 
     private void Start()
     {
+
+        minigameManager=Dependencies.Instance.GetDependancy<MinigameManager>();
         musicManager = Dependencies.Instance.GetDependancy<Musicmanager>();
     }
 
@@ -57,7 +62,7 @@ public class MaskPaintingMinigame : MonoBehaviour
 
         HandleRotation();
         HandlePainting();
-        CheckCompletion();
+      //  CheckCompletion();
     }
 
     void HandleRotation()
@@ -96,7 +101,7 @@ public class MaskPaintingMinigame : MonoBehaviour
         isInitialized = false;
 
         // zapisujemy użyty flower
-        MinigameManager.Instance.usedFlower = usedFlower;
+       minigameManager.usedFlower = usedFlower;
 
         OnMinigameEnd?.Invoke();
     }

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e723b6a8258934541a8650af84102a96, type: 3}
+  m_Name: OrderInfo 5
+  m_EditorClassIdentifier: 
+  Message: "Yo stary. S\u0142uchaj, musisz zrobi\u0107 mi mask\u0119, ezzz \u2014
+    ale musi strzela\u0107 fajerwerkami, rozumiesz? Skibidibi! Ale musi by\u0107
+    twarda, jasne? I chc\u0119, \u017Ceby by\u0142a super lekka, swaaag\u2026 wi\u0119c
+    rusz dup\u0119 i przygotuj mi zabawk\u0119, ESSA.  "
+  woodType: 1
+  metalType: 0
+  flowerType: 0

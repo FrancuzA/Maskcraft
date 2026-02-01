@@ -4,52 +4,37 @@ using static ResourcesTypes;
 public class OrderSystem : MonoBehaviour
 {
     public static OrderSystem Instance { get; private set; }
-
-    public bool hasActiveOrder { get; private set; } = false;
+    public bool hasActiveOrder = false;
+    public string currentMessage;
     public WoodType currentWood;
     public MetalType currentMetal;
     public FlowerType currentFlower;
-
-    void Awake()
+    private OrderList currentOrderList;
+    private OrderText currentOrderText;
+    private void Start()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+        Dependencies.Instance.RegisterDependency<OrderSystem>(this);
+        currentOrderList = Dependencies.Instance.GetDependancy<OrderList>();
+        GetNextOrder();
     }
 
-    // Add this property to OrderSystem.cs
-    public bool CanGenerateOrder { get; set; } = true;
-
-    // Modify GenerateOrder method:
-    public void GenerateOrder()
+    public void GetNextOrder()
     {
-        if (hasActiveOrder || !CanGenerateOrder) return;
+        if (hasActiveOrder) return;
+        if (currentOrderList.orders.Count == 0) return;
+        currentOrderText = currentOrderList.orders[0];
+        currentMessage = currentOrderText.Message;
+        currentWood = currentOrderText.woodType;
+        currentMetal = currentOrderText.metalType;
+        currentFlower = currentOrderText.flowerType;
 
-        currentWood = (WoodType)Random.Range(0, 3);
-        currentMetal = (MetalType)Random.Range(0, 3);
-        currentFlower = (FlowerType)Random.Range(0, 3);
 
         hasActiveOrder = true;
-
-        Debug.Log($"📜 New order generated: {currentWood}, {currentMetal}, {currentFlower}");
-
-        // Optional: Play notification sound
-        // AudioManager.Instance.Play("NewOrder");
     }
 
-    // Sprawdza czy gracz wykonał zamówienie poprawnie
-    public bool CheckOrder()
-    {
-        bool correct = MinigameManager.Instance.IsOrderCorrect();
-        return correct;
-    }
-
-    // Czyści zamówienie po weryfikacji
     public void ClearOrder()
     {
         hasActiveOrder = false;
+
     }
 }

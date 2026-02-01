@@ -3,13 +3,15 @@
 public class Terminal : MonoBehaviour, IInteractable
 {
     public int rewardGold = 10;
+    private BirdController birdController;
 
+    [System.Obsolete]
     void Start()
     {
-        // Make sure OrderSystem exists
-        if (OrderSystem.Instance == null)
+        birdController = FindObjectOfType<BirdController>();
+        if (birdController == null)
         {
-            Debug.LogError("❌ OrderSystem not found!");
+            
         }
     }
 
@@ -17,40 +19,66 @@ public class Terminal : MonoBehaviour, IInteractable
     {
         Debug.Log("🖐 Terminal interact");
 
-        // If there's an active order and player has completed all steps
+        // Jeśli jest zamówienie i gracz skończył (3 kroki)
         if (OrderSystem.Instance.hasActiveOrder && MinigameManager.Instance.CurrentStep >= 3)
         {
-            Debug.Log("🔍 Verifying order");
+            Debug.Log("🔍 Sprawdzam zamówienie...");
 
             bool success = MinigameManager.Instance.IsOrderCorrect();
 
             if (success)
             {
-                Debug.Log("✅ SUCCESS +10 gold");
+                Debug.Log($"✅ DOBRZE! +{rewardGold} golda");
                 Inventory.instance.AddGold(rewardGold);
             }
             else
             {
-                Debug.Log("❌ FAIL 0 gold");
+                Debug.Log("❌ ŹLE! 0 golda");
             }
 
-            // Reset everything
+            // 1. Resetuj minigry
             MinigameManager.Instance.ResetLoop();
+
+            // 2. Wyczyść stare zamówienie
             OrderSystem.Instance.ClearOrder();
+
+            // 3. Wyczyść stary list z UI
+            if (OrderLetterUI.Instance != null)
+            {
+                OrderLetterUI.Instance.SetHasLetter(false);
+            }
+
+            // 4. OD RAZU WOŁAJ SOWĘ po NOWE zamówienie!
+            if (birdController != null)
+            {
+                Debug.Log("🦉 Wołam sowę po nowe zamówienie!");
+                birdController.DeliverNextOrder();
+            }
+            else
+            {
+                Debug.LogError("❌ Nie ma sowy do zawołania!");
+            }
         }
+        // Jeśli jest zamówienie ale gracz nie skończył
         else if (OrderSystem.Instance.hasActiveOrder)
         {
-            // Show current order letter
-            Debug.Log("📄 Showing current order");
-            OrderLetterUI.Instance.ShowLetter();
+            Debug.Log("📄 Pokazuję aktualny list");
+            if (OrderLetterUI.Instance != null)
+            {
+                OrderLetterUI.Instance.ShowLetter();
+            }
         }
+        // Jeśli nie ma zamówienia
         else
         {
-            // No active order - tell player to wait for owl
-            Debug.Log("📭 No active order. Wait for the owl delivery!");
+            Debug.Log("📭 Nie ma aktywnego zamówienia");
 
-            // Optional: Show message UI
-            // MessageUI.Instance.ShowMessage("Wait for the owl to deliver your next order!");
+            // Możesz od razu zawołać sowę
+            if (birdController != null)
+            {
+                Debug.Log("🦉 Wołam sowę bo nie ma zamówienia!");
+                birdController.DeliverNextOrder();
+            }
         }
     }
 }
