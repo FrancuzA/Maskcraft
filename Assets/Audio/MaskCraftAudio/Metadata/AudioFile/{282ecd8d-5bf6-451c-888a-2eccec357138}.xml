@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.03.00">
 	<object class="AudioFile" id="{282ecd8d-5bf6-451c-888a-2eccec357138}">
 		<property name="assetPath">
-			<value>MaskCraft_Main - organs.wav</value>
+			<value>Music/MaskCraft_Main - organs.wav</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>

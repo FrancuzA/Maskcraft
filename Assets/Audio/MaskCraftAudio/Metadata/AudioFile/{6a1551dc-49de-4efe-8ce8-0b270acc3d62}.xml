@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.03.00">
 	<object class="AudioFile" id="{6a1551dc-49de-4efe-8ce8-0b270acc3d62}">
 		<property name="assetPath">
-			<value>MaskCraft_Main - AfroPerc.wav</value>
+			<value>Music/MaskCraft_Main - AfroPerc.wav</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>

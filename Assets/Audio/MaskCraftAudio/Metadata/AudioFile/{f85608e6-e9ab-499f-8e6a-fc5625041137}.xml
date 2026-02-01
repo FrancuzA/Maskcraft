@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.03.00">
+	<object class="AudioFile" id="{f85608e6-e9ab-499f-8e6a-fc5625041137}">
+		<property name="assetPath">
+			<value>Dialogi/dialog11.mp3</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>23.111999999999998</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{be9a9105-2579-41cd-8964-3cc3465e77d3}</destination>
+		</relationship>
+	</object>
+</objects>

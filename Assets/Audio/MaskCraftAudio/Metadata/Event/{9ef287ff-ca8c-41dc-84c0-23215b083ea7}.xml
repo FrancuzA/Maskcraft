@@ -5,7 +5,7 @@
 			<value>FlowerPicking</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{d17b1749-fd49-4e22-8cb8-28a133d25ebb}</destination>
@@ -116,7 +116,6 @@
 	<object class="MixerBusEffectChain" id="{58e9c355-f2fb-40d2-a91e-b50c45c1b827}">
 		<relationship name="effects">
 			<destination>{359c941b-a1af-472d-b76b-9674a2942cac}</destination>
-			<destination>{21bd1506-fe7a-4ad4-b580-31de9754bad0}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{3fa805f0-db74-4c15-9b71-79a21dc22226}" />
@@ -148,6 +147,5 @@
 	</object>
 	<object class="MixerBusPanner" id="{0ad80861-f58e-4deb-860d-0745c1fc06f5}" />
 	<object class="MixerBusFader" id="{359c941b-a1af-472d-b76b-9674a2942cac}" />
-	<object class="SpatialiserEffect" id="{21bd1506-fe7a-4ad4-b580-31de9754bad0}" />
 	<object class="MixerBusFader" id="{4a49c3aa-d4ed-486a-8430-5abadb1f43fa}" />
 </objects>

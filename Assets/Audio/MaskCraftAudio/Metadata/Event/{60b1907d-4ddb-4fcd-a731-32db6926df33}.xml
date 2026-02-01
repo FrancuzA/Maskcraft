@@ -5,7 +5,7 @@
 			<value>WoodCutting</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{d17b1749-fd49-4e22-8cb8-28a133d25ebb}</destination>
@@ -117,7 +117,6 @@
 	<object class="MixerBusEffectChain" id="{eb2b8869-7d01-48b5-b65f-9a83188e872a}">
 		<relationship name="effects">
 			<destination>{a7acd9a0-3f59-4741-9c36-3afe08624d5f}</destination>
-			<destination>{a97d72c2-ca71-4f6e-b53e-0c7e4ed40886}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{4373d301-b459-4290-be7b-b71d5e2bc399}" />
@@ -169,6 +168,5 @@
 	</object>
 	<object class="MixerBusPanner" id="{00046611-8a8d-4e56-85b2-d414ddd8a30b}" />
 	<object class="MixerBusFader" id="{a7acd9a0-3f59-4741-9c36-3afe08624d5f}" />
-	<object class="SpatialiserEffect" id="{a97d72c2-ca71-4f6e-b53e-0c7e4ed40886}" />
 	<object class="MixerBusFader" id="{885940d2-aa97-46d7-a3f6-82f27dfa39a1}" />
 </objects>

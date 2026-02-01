@@ -18,22 +18,14 @@ public class Musicmanager : MonoBehaviour
     private void Start()
     {   
         playerTransform = Dependencies.Instance.GetDependancy<PlayerMovement>().gameObject.transform;
-       
-        
-       
     }
 
     public void PlaySound(EventReference SoundRef)
     {
-       EventInstance SoundInst =  CreateInstnace(SoundRef);
-       SoundInst.start();
-       SoundInst.release();
-    }
-
-    public EventInstance CreateInstnace(EventReference SoundRef)
-    {
-        EventInstance SoundInstance = RuntimeManager.CreateInstance(SoundRef);
-        return SoundInstance;
+       EventInstance SoundInstance = RuntimeManager.CreateInstance(SoundRef);
+       Debug.Log(SoundInstance.isValid());
+       SoundInstance.start();
+       SoundInstance.release();
     }
 
     public void PlayStep(String GroundType)
