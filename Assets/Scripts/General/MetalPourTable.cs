@@ -2,10 +2,15 @@
 
 public class MetalPourTable : MonoBehaviour, IInteractable
 {
+    private MinigameManager minigameManager;
+    private void Start()
+    {
+        minigameManager = Dependencies.Instance.GetDependancy<MinigameManager>();
+    }
     public void Interact()
     {
-        if (MinigameManager.Instance == null) return;
+        if (minigameManager == null) return;
 
-        MinigameManager.Instance.EnterMinigame("MetalPour");
+        minigameManager.EnterMinigame("MetalPour");
     }
 }
