@@ -23,7 +23,7 @@ public class BirdController : MonoBehaviour
 
         Dependencies.Instance.RegisterDependency<BirdController>(this);
         musicManager = Dependencies.Instance.GetDependancy<Musicmanager>();
-        orderSystem = OrderSystem.Instance;
+        orderSystem = Dependencies.Instance.GetDependancy<OrderSystem>();
 
         // Upewnij się że mamy Animatora
         if (owlAnimator == null)
@@ -67,11 +67,11 @@ public class BirdController : MonoBehaviour
     {
        
 
-        if (!isDelivering  || !orderSystem.hasActiveOrder)
-        {
+      
+        
            
             startDelivery();
-        }
+        
     }
 
     public void Scream()

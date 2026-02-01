@@ -13,9 +13,13 @@ public class OrderSystem : MonoBehaviour
     public EventReference currentDialogue;
     private OrderList currentOrderList;
     private OrderText currentOrderText;
-    private void Start()
+    private void Awake()
     {
         Dependencies.Instance.RegisterDependency<OrderSystem>(this);
+    }
+    private void Start()
+    {
+        
         currentOrderList = Dependencies.Instance.GetDependancy<OrderList>();
         GetNextOrder();
     }
@@ -38,6 +42,6 @@ public class OrderSystem : MonoBehaviour
     public void ClearOrder()
     {
         hasActiveOrder = false;
-
+        GetNextOrder();
     }
 }
