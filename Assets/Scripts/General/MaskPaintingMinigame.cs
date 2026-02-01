@@ -62,7 +62,7 @@ public class MaskPaintingMinigame : MonoBehaviour
 
         HandleRotation();
         HandlePainting();
-      //  CheckCompletion();
+        CheckCompletion();
     }
 
     void HandleRotation()

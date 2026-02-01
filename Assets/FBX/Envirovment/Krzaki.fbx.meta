@@ -1,14 +1,9 @@
 fileFormatVersion: 2
-guid: ec7f2a54b87e42d48af00318d971fa55
+guid: 3ef65deda80df0a4d9e60014313f2832
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Wierzba liscie
-    second: {fileID: 2100000, guid: fabd1a8b54f600643b11cefae9c3f7a0, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0

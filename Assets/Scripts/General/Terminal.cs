@@ -5,9 +5,13 @@ public class Terminal : MonoBehaviour, IInteractable
     public int rewardGold = 10;
     private BirdController birdController;
 
+    OrderSystem orderSystem;
+    MinigameManager minigameManager;
     [System.Obsolete]
     void Start()
     {
+        orderSystem=Dependencies.Instance.GetDependancy<OrderSystem>();
+        minigameManager=Dependencies.Instance.GetDependancy<MinigameManager>();
         birdController = FindObjectOfType<BirdController>();
         if (birdController == null)
         {
@@ -20,11 +24,11 @@ public class Terminal : MonoBehaviour, IInteractable
         Debug.Log("🖐 Terminal interact");
 
         // Jeśli jest zamówienie i gracz skończył (3 kroki)
-        if (OrderSystem.Instance.hasActiveOrder && MinigameManager.Instance.CurrentStep >= 3)
+        if (orderSystem.hasActiveOrder && minigameManager.CurrentStep >= 3)
         {
             Debug.Log("🔍 Sprawdzam zamówienie...");
 
-            bool success = MinigameManager.Instance.IsOrderCorrect();
+            bool success =minigameManager.IsOrderCorrect();
 
             if (success)
             {
@@ -35,12 +39,12 @@ public class Terminal : MonoBehaviour, IInteractable
             {
                 Debug.Log("❌ ŹLE! 0 golda");
             }
-
+            Dependencies.Instance.GetDependancy<OrderList>().orders.RemoveAt(0);
             // 1. Resetuj minigry
-            MinigameManager.Instance.ResetLoop();
+           minigameManager.ResetLoop();
 
             // 2. Wyczyść stare zamówienie
-            OrderSystem.Instance.ClearOrder();
+           orderSystem.ClearOrder();
 
             // 3. Wyczyść stary list z UI
             if (OrderLetterUI.Instance != null)
@@ -60,7 +64,7 @@ public class Terminal : MonoBehaviour, IInteractable
             }
         }
         // Jeśli jest zamówienie ale gracz nie skończył
-        else if (OrderSystem.Instance.hasActiveOrder)
+        else if (orderSystem.hasActiveOrder)
         {
             Debug.Log("📄 Pokazuję aktualny list");
             if (OrderLetterUI.Instance != null)

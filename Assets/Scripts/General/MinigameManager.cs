@@ -17,6 +17,7 @@ public class MinigameManager : MonoBehaviour
     public MetalPourMinigame metalPourMinigame;
     public MaskPaintingMinigame maskPaintingMinigame;
 
+
     // ===== ORDER STATE =====
     
 
@@ -27,13 +28,16 @@ public class MinigameManager : MonoBehaviour
 
     public int CurrentStep { get; private set; } = 0;
     private bool isMinigameActive = false;
-
+    private OrderSystem orderSystem;
     void Awake()
     {
       Dependencies.Instance.RegisterDependency<MinigameManager>(this);
-
+       
     }
-
+    private void Start()
+    {
+       orderSystem= Dependencies.Instance.GetDependancy<OrderSystem>();
+    }
     // ================= ENTER =================
     public void EnterMinigame(string name)
     {
@@ -131,9 +135,9 @@ public class MinigameManager : MonoBehaviour
 
     public bool IsOrderCorrect()
     {
-        return usedWood == OrderSystem.Instance.currentWood &&
-               usedMetal == OrderSystem.Instance.currentMetal &&
-               usedFlower == OrderSystem.Instance.currentFlower;
+        return usedWood == orderSystem.currentWood &&
+               usedMetal == orderSystem.currentMetal &&
+               usedFlower == orderSystem.currentFlower;
     }
 
 

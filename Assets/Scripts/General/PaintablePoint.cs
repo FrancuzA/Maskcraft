@@ -41,8 +41,8 @@ public class PaintablePoint : MonoBehaviour
     {
         if (isPainted) return; // NIE malujemy ju¿ pomalowanego punktu
         isPainted = true;
-        if (rend != null)
-            rend.material.color = paintColor;
+        //deckalon
+        gameObject.SetActive(false);
     }
 
     public void ResetPoint()
@@ -52,9 +52,5 @@ public class PaintablePoint : MonoBehaviour
             rend.material.color = Color.red; // domyœlny "niepomalowany" kolor
     }
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = isPainted ? paintColor : Color.red;
-        Gizmos.DrawSphere(transform.position, 0.05f);
-    }
+
 }
