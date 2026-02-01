@@ -11,13 +11,11 @@ public class PlayerMovement : MonoBehaviour
     public float gravity = -9.81f;
     public float distToGround;
     public Animator WalkAnim;
-
     [Header("Look")]
     public Transform cameraTransform;
     public float mouseSensitivity = 600f;
 
     [Header("Hand")]
-    public GameObject handParent;
     public GameObject axePref;
     public GameObject pickaxePref;
     public string currentItem = null;
@@ -115,21 +113,22 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             currentItem = null;
-            handParent.transform.DestroyAllChildren();
+            axePref.SetActive(false);
+            pickaxePref.SetActive(false);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             currentItem = "axe";
-            handParent.transform.DestroyAllChildren();
-            Instantiate(axePref, handParent.transform.position, Quaternion.identity, handParent.transform);
+            pickaxePref.SetActive(false);
+            axePref.SetActive(true);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             currentItem = "pickaxe";
-            handParent.transform.DestroyAllChildren();
-            Instantiate(pickaxePref, handParent.transform.position, Quaternion.identity, handParent.transform);
+            axePref.SetActive(false);
+            pickaxePref.SetActive(true);
         }
     }
 

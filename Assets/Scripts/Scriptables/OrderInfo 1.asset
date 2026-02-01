@@ -22,3 +22,10 @@ MonoBehaviour:
   woodType: 0
   metalType: 0
   flowerType: 1
+  dialogueSound:
+    Guid:
+      Data1: -1497031374
+      Data2: 1211043412
+      Data3: 868126631
+      Data4: -849505767
+    Path: event:/Dialogues/Dialogue2

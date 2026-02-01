@@ -4922,14 +4922,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 386555590681504974, guid: 22aa4e9148dd1ec49ae2c7c1d12543e2, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.136773
-      objectReference: {fileID: 0}
-    - target: {fileID: 386555590681504974, guid: 22aa4e9148dd1ec49ae2c7c1d12543e2, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.1437752
-      objectReference: {fileID: 0}
     - target: {fileID: 4286287389864118272, guid: 22aa4e9148dd1ec49ae2c7c1d12543e2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.09610081
@@ -4970,82 +4962,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6235209347991418721, guid: 22aa4e9148dd1ec49ae2c7c1d12543e2, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.1396968
-      objectReference: {fileID: 0}
-    - target: {fileID: 6235209347991418721, guid: 22aa4e9148dd1ec49ae2c7c1d12543e2, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.1526772
-      objectReference: {fileID: 0}
     - target: {fileID: 7629426510419448801, guid: 22aa4e9148dd1ec49ae2c7c1d12543e2, type: 3}
       propertyPath: m_Name
       value: bird_4
       objectReference: {fileID: 0}
-    - target: {fileID: 7709708578841671833, guid: 22aa4e9148dd1ec49ae2c7c1d12543e2, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.02717166
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 7461192816630734646, guid: 22aa4e9148dd1ec49ae2c7c1d12543e2, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7629426510419448801, guid: 22aa4e9148dd1ec49ae2c7c1d12543e2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1345676660}
-    - targetCorrespondingSourceObject: {fileID: 7629426510419448801, guid: 22aa4e9148dd1ec49ae2c7c1d12543e2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1345676662}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22aa4e9148dd1ec49ae2c7c1d12543e2, type: 3}
---- !u!1 &1345676658 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7629426510419448801, guid: 22aa4e9148dd1ec49ae2c7c1d12543e2, type: 3}
-  m_PrefabInstance: {fileID: 1345676657}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1345676660
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1345676658}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1dea15b1c59c9a46b04a3b52c7a9f33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  owlAnimator: {fileID: 1345676662}
-  letterPrefab: {fileID: 692415041088831414, guid: e5a34fb197d1faf4c877df457629354d, type: 3}
-  scream:
-    Guid:
-      Data1: -1851648678
-      Data2: 1258549893
-      Data3: 699769772
-      Data4: -1488088828
-    Path: event:/BirdScream
---- !u!95 &1345676662
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1345676658}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 3f59d7f7451036c498ab6cba99a4bbe6, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &1360839211 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 791068454964759366, guid: 8da04d3db6de19344abd48e29cb14dc5, type: 3}
@@ -8391,3 +8316,4 @@ SceneRoots:
   - {fileID: 418170207}
   - {fileID: 936911620}
   - {fileID: 950360158}
+  - {fileID: 8027879910637925186}

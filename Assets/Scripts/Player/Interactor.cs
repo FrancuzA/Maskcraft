@@ -4,10 +4,11 @@ using UnityEngine;
 public class Interactor : MonoBehaviour
 {
     public float interactRange;
-    private Quaternion lastRotation;
+    public Animator HandAnim;
     public GameObject playerCamera;
     private bool interactableInRange;
     private IInteractable interactable;
+    private Quaternion lastRotation;
 
 
     public void Start()
@@ -23,13 +24,30 @@ public class Interactor : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && interactableInRange)
         {
-            if(interactable != null)
+            if (interactable != null)
+            {
                 interactable.Interact();
+                HandleAnimation();
+            }
+                
         }
 
     }
 
-
+    private void HandleAnimation()
+    {
+        string t = Dependencies.Instance.GetDependancy<PlayerMovement>().currentItem;
+        switch (t)
+        {
+            case "axe":
+                HandAnim.SetTrigger("UseAxe");
+                break;
+            case "pickaxe":
+                HandAnim.SetTrigger("UsePickaxe");
+                break;
+            case null: return;
+        }
+    }
 
     private void FixedUpdate()
     {

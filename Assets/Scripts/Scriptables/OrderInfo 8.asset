@@ -12,13 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e723b6a8258934541a8650af84102a96, type: 3}
   m_Name: OrderInfo 8
   m_EditorClassIdentifier: 
-  Message: " 11.\tDzie\u0144 dobry, chcia\u0142bym kupi\u0107 mask\u0119 dla mojej
-    siostry. Potrzebuj\u0119 maski p\u0142on\u0105cej, bardzo \u2014 i mam na my\u015Bli
-    bardzo \u2014 zauwa\u017Calnej\u2026 i przede wszystkim\u2026 ci\u0119\u017Ckiej.
-    Ale nie martw si\u0119\u2026 chc\u0119 tylko wyleczy\u0107 moj\u0105 siostr\u0119
+  Message: "Dzie\u0144 dobry, chcia\u0142bym kupi\u0107 mask\u0119 dla mojej siostry.
+    Potrzebuj\u0119 maski p\u0142on\u0105cej, bardzo \u2014 i mam na my\u015Bli bardzo
+    \u2014 zauwa\u017Calnej\u2026 i przede wszystkim\u2026 ci\u0119\u017Ckiej. Ale
+    nie martw si\u0119\u2026 chc\u0119 tylko wyleczy\u0107 moj\u0105 siostr\u0119
     z jej nadmiernej agresji, heh. Jestem pewny, \u017Ce to zadzia\u0142a, zw\u0142aszcza
     kiedy zapali si\u0119 za ka\u017Cdym razem, gdy straci panowanie nad sob\u0105.
     Dzi\u0119kuj\u0119. "
   woodType: 0
   metalType: 1
   flowerType: 0
+  dialogueSound:
+    Guid:
+      Data1: -2136364759
+      Data2: 1285541994
+      Data3: -1405822
+      Data4: -887033378
+    Path: event:/Dialogues/Dialogue11

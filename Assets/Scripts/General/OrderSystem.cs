@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using FMODUnity;
+using UnityEngine;
 using static ResourcesTypes;
 
 public class OrderSystem : MonoBehaviour
@@ -9,6 +10,7 @@ public class OrderSystem : MonoBehaviour
     public WoodType currentWood;
     public MetalType currentMetal;
     public FlowerType currentFlower;
+    public EventReference currentDialogue;
     private OrderList currentOrderList;
     private OrderText currentOrderText;
     private void Start()
@@ -27,6 +29,7 @@ public class OrderSystem : MonoBehaviour
         currentWood = currentOrderText.woodType;
         currentMetal = currentOrderText.metalType;
         currentFlower = currentOrderText.flowerType;
+        currentDialogue = currentOrderText.dialogueSound;
 
 
         hasActiveOrder = true;

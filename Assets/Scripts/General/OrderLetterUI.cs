@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 
 public class OrderLetterUI : MonoBehaviour
@@ -11,15 +12,21 @@ public class OrderLetterUI : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private KeyCode toggleKey = KeyCode.Tab;
+    public bool hasLetter = false;
 
     private bool isUIOpen = false;
-    public bool hasLetter = false;
+    private Musicmanager musicManager;
+    
 
     void Awake()
     {
         Dependencies.Instance.RegisterDependency<OrderLetterUI>(this);
     }
 
+    public void Start()
+    {
+        musicManager = Dependencies.Instance.GetDependancy<Musicmanager>();
+    }
 
     void Update()
     {
@@ -71,7 +78,10 @@ public class OrderLetterUI : MonoBehaviour
 
         panel.SetActive(true);
         isUIOpen = true;
-
+        if (!o.currentDialogue.IsNull)
+        {
+            musicManager.PlaySound(o.currentDialogue);
+        }
         // Pause game
         Time.timeScale = 0f;
         Cursor.visible = true;
