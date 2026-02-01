@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
-
+using FMOD.Studio;
+using FMODUnity;
 public class FlowerScript : MonoBehaviour, IInteractable
 {
     [Header("Flower Settings")]
@@ -7,8 +8,9 @@ public class FlowerScript : MonoBehaviour, IInteractable
     public int flowerHP = 100;
     public int damage = 10;
     public int flowerValue = 1;
-
+    private Musicmanager musicManager;
     private int currentHP;
+    public EventReference  pickingSound;
 
     void Start()
     {
@@ -24,6 +26,7 @@ public class FlowerScript : MonoBehaviour, IInteractable
 
     void DamageFlower()
     {
+        musicManager.PlaySound(pickingSound);
         currentHP -= damage;
         Debug.Log($"💥 {flowerType} took {damage} damage. HP: {currentHP}/{flowerHP}");
 

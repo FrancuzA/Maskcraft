@@ -131,6 +131,13 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   progressText: {fileID: 5902192630650542692}
+  brushSound:
+    Guid:
+      Data1: 999616905
+      Data2: 1078582412
+      Data3: -1371455057
+      Data4: -1947479411
+    Path: event:/Brush
   autoRotationSpeed: 20
   manualRotationSpeed: 60
 --- !u!1 &4436303918035237573
