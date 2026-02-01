@@ -126,3 +126,10 @@ MonoBehaviour:
   damage: 10
   oreType: gold
   oreValue: 1
+  miningSound:
+    Guid:
+      Data1: -96053144
+      Data2: 1180496369
+      Data3: -2095271540
+      Data4: -1501455899
+    Path: event:/StoneBreaking

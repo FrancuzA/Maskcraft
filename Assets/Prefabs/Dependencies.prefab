@@ -71,18 +71,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bece45d2750e5694bad18335b6608a53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundObject: {fileID: 0}
-  groundLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  FlowerGroup: {fileID: 0}
-  flowersToSpawn: []
-  spawnRadius: 0.3
-  poppyPrefab: {fileID: 0}
-  violetPrefab: {fileID: 0}
-  chrysanthemumPrefab: {fileID: 0}
-  maxAttemptsPerFlower: 50
-  checkHeight: 10
+  poppyPrefab: {fileID: 4040713692662229594, guid: 3670d586141b98041a64ae0585547d1f, type: 3}
+  violetPrefab: {fileID: 9056939552142678452, guid: 95c6f6cd0b364a54b919159f8011a039, type: 3}
+  chrysanthemumPrefab: {fileID: 2444505439850323465, guid: 3cf35ee418907934a8c56120b43d9a51, type: 3}
+  spawnZones:
+  - {fileID: 0}
+  flowersPerType: 10
+  minDistanceBetweenFlowers: 1.5
 --- !u!114 &8604441856921665823
 MonoBehaviour:
   m_ObjectHideFlags: 0

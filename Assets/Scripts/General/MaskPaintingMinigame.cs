@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using FMOD.Studio;
+using FMODUnity;
 using static ResourcesTypes;
 
 public class MaskPaintingMinigame : MonoBehaviour
@@ -10,15 +12,21 @@ public class MaskPaintingMinigame : MonoBehaviour
     public Transform maskModel;
     public List<PaintablePoint> points = new List<PaintablePoint>();
     public TMP_Text progressText;
-
+    public EventReference brushSound;
     [Header("Rotation")]
     public float autoRotationSpeed = 20f;
     public float manualRotationSpeed = 50f;
 
     private bool isInitialized = false;
     private FlowerType usedFlower;
-
+    private Musicmanager musicManager;
     public Action OnMinigameEnd;
+
+
+    private void Start()
+    {
+        musicManager = Dependencies.Instance.GetDependancy<Musicmanager>();
+    }
 
     public void SetResource(string flower)
     {
@@ -73,6 +81,7 @@ public class MaskPaintingMinigame : MonoBehaviour
             PaintablePoint point = hit.collider.GetComponent<PaintablePoint>();
             if (point != null && !point.isPainted)
             {
+                musicManager.PlaySound(brushSound);
                 point.Paint();
                 UpdateProgressText();
             }

@@ -127,3 +127,10 @@ MonoBehaviour:
   flowerHP: 50
   damage: 10
   flowerValue: 1
+  pickingSound:
+    Guid:
+      Data1: -1628272641
+      Data2: 1104988812
+      Data3: 555991172
+      Data4: -1489106853
+    Path: event:/FlowerPicking

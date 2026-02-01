@@ -1,7 +1,8 @@
 using System;
 using System.Collections;
 using UnityEngine;
-
+using FMOD.Studio;
+using FMODUnity;
 public class OreScript : MonoBehaviour, IInteractable
 {
     private int currentHP;
@@ -9,6 +10,8 @@ public class OreScript : MonoBehaviour, IInteractable
     public int damage;
     public string oreType;
     public int oreValue = 2;
+    private Musicmanager musicManager;
+    public EventReference miningSound ;
     public void Interact()
     {
         DamageOre();
@@ -21,6 +24,7 @@ public class OreScript : MonoBehaviour, IInteractable
 
     public void DamageOre()
     {
+        musicManager.PlaySound(miningSound);
         currentHP -= damage;
         if (currentHP <= 0)DestroyOre();
     }

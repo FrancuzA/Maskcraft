@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
-
+using FMOD.Studio;
+using FMODUnity;
 public class TreeScript : MonoBehaviour, IInteractable
 {
     private int currentHp;
@@ -10,6 +11,8 @@ public class TreeScript : MonoBehaviour, IInteractable
     public float treeSize;
     public int treeValue = 5;
     public string woodType;
+    private Musicmanager musicManager;
+    public EventReference  cuttingSound;
 
     private void Start()
     {
@@ -34,6 +37,7 @@ public class TreeScript : MonoBehaviour, IInteractable
 
     private void DamageTree()
     {
+        musicManager.PlaySound(cuttingSound);
         currentHp -= damage;
         if (currentHp <= 0)
         {

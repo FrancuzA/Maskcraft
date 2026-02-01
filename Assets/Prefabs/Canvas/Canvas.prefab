@@ -188,9 +188,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawingCanvas: {fileID: 5265781987223280421}
-  maskReferenceAkacja: {fileID: 2800000, guid: df817892721e96c45905e22aeda82f1d, type: 3}
-  maskReferenceWierzba: {fileID: 2800000, guid: bfa4db23e5ea29742916415b29bf42f0, type: 3}
-  maskReferencePalma: {fileID: 2800000, guid: ff8967deda1829240bed8d92943c19f3, type: 3}
+  maskReferenceAkacja: {fileID: 2800000, guid: 2929343d2364b84488ee9a207bad8521, type: 3}
+  maskReferenceWierzba: {fileID: 2800000, guid: 3e439dff45924334ba489089577647a5, type: 3}
+  maskReferencePalma: {fileID: 2800000, guid: 0980fe5201f341a4f90e2639db229bf4, type: 3}
+  guideMaskReferenceAkacja: {fileID: 2800000, guid: 6fa826743439d9d45876a54d3edd918c, type: 3}
+  guideMaskReferenceWierzba: {fileID: 2800000, guid: 45e9da96811448f41bc738d6703cf3f7, type: 3}
+  guideMaskReferencePalma: {fileID: 2800000, guid: 96fa449af3b87e249b65777184272854, type: 3}
   maskGuide: {fileID: 7988818334307737133}
   similarityText: {fileID: 226490094656518582}
   brushSize: 10
@@ -394,7 +397,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: df817892721e96c45905e22aeda82f1d, type: 3}
+  m_Texture: {fileID: 2800000, guid: 96fa449af3b87e249b65777184272854, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
