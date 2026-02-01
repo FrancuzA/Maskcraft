@@ -4,21 +4,21 @@ public class Terminal : MonoBehaviour, IInteractable
 {
     public int rewardGold = 10;
 
+    void Start()
+    {
+        // Make sure OrderSystem exists
+        if (OrderSystem.Instance == null)
+        {
+            Debug.LogError("❌ OrderSystem not found!");
+        }
+    }
+
     public void Interact()
     {
         Debug.Log("🖐 Terminal interact");
 
-        // brak zamówienia → generuj
-        if (!OrderSystem.Instance.hasActiveOrder)
-        {
-            Debug.Log("📄 New order generated");
-            OrderSystem.Instance.GenerateOrder();
-            OrderLetterUI.Instance.ShowLetter();
-            return;
-        }
-
-        // są 3 kroki → ocena
-        if (MinigameManager.Instance.CurrentStep >= 3)
+        // If there's an active order and player has completed all steps
+        if (OrderSystem.Instance.hasActiveOrder && MinigameManager.Instance.CurrentStep >= 3)
         {
             Debug.Log("🔍 Verifying order");
 
@@ -34,15 +34,23 @@ public class Terminal : MonoBehaviour, IInteractable
                 Debug.Log("❌ FAIL 0 gold");
             }
 
-            // reset wszystkiego
+            // Reset everything
             MinigameManager.Instance.ResetLoop();
             OrderSystem.Instance.ClearOrder();
         }
+        else if (OrderSystem.Instance.hasActiveOrder)
+        {
+            // Show current order letter
+            Debug.Log("📄 Showing current order");
+            OrderLetterUI.Instance.ShowLetter();
+        }
         else
         {
-            // w trakcie craftingu → tylko pokaz list
-            Debug.Log("📄 Showing letter again");
-            OrderLetterUI.Instance.ShowLetter();
+            // No active order - tell player to wait for owl
+            Debug.Log("📭 No active order. Wait for the owl delivery!");
+
+            // Optional: Show message UI
+            // MessageUI.Instance.ShowMessage("Wait for the owl to deliver your next order!");
         }
     }
 }

@@ -20,10 +20,13 @@ public class OrderSystem : MonoBehaviour
         Instance = this;
     }
 
-    // Generuje nowe zamówienie (losowe)
+    // Add this property to OrderSystem.cs
+    public bool CanGenerateOrder { get; set; } = true;
+
+    // Modify GenerateOrder method:
     public void GenerateOrder()
     {
-        if (hasActiveOrder) return; // nie generuj, jeśli już jest aktywne
+        if (hasActiveOrder || !CanGenerateOrder) return;
 
         currentWood = (WoodType)Random.Range(0, 3);
         currentMetal = (MetalType)Random.Range(0, 3);
@@ -31,7 +34,10 @@ public class OrderSystem : MonoBehaviour
 
         hasActiveOrder = true;
 
-        Debug.Log($"📜 Nowe zamówienie: {currentWood}, {currentMetal}, {currentFlower}");
+        Debug.Log($"📜 New order generated: {currentWood}, {currentMetal}, {currentFlower}");
+
+        // Optional: Play notification sound
+        // AudioManager.Instance.Play("NewOrder");
     }
 
     // Sprawdza czy gracz wykonał zamówienie poprawnie
