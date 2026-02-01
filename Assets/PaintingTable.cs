@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class PaintingTable : MonoBehaviour, IInteractable
 {
@@ -13,7 +12,20 @@ public class PaintingTable : MonoBehaviour, IInteractable
         if (MinigameManager.Instance == null) return;
         if (MinigameManager.Instance.IsMinigameActive()) return;
 
-        // Spawn maski przed kamerą
+        if (MinigameManager.Instance.CurrentStep < 2)
+        {
+            Debug.LogWarning("Musisz najpierw ukończyć Carving i Metal Pour!");
+            return;
+        }
+
+        if (!MinigameManager.Instance.HasRequiredResource("MaskPainting"))
+        {
+            Debug.LogWarning("Nie masz żadnego kwiatka w ekwipunku!");
+            return;
+        }
+
+        string flower = MinigameManager.Instance.GetResourceForMinigame("MaskPainting");
+
         Camera cam = Camera.main;
         Vector3 pos = cam.transform.position + cam.transform.forward * maskDistanceFromCamera;
         Quaternion rot = Quaternion.LookRotation(cam.transform.forward);
@@ -23,37 +35,33 @@ public class PaintingTable : MonoBehaviour, IInteractable
         MaskPaintingMinigame minigame = MinigameManager.Instance.maskPaintingMinigame;
         minigame.maskModel = currentMaskInstance.transform;
 
-        // Pobierz punkty do malowania
         minigame.points.Clear();
         PaintablePoint[] found = currentMaskInstance.GetComponentsInChildren<PaintablePoint>();
         minigame.points.AddRange(found);
 
-        Debug.Log("🎯 Found paint points: " + found.Length);
+        minigame.SetResource(flower);
 
-        // callback po zakończeniu minigry
         minigame.OnMinigameEnd = OnMinigameEnd;
 
-        // Start minigry
         MinigameManager.Instance.EnterMinigame("MaskPainting");
         minigame.InitializeMinigame();
 
-        // Wyłącz stół dopiero po tym, jak wszystko jest uruchomione
         gameObject.SetActive(false);
     }
 
     void OnMinigameEnd()
     {
-        // 1. Zakończ minigre (canvas + gracz)
+        // kończymy minigrę (to wywoła też reset loopa)
         MinigameManager.Instance.ExitMinigame();
 
-        // 2. Usuń maskę
         if (currentMaskInstance != null)
             Destroy(currentMaskInstance);
 
         currentMaskInstance = null;
 
-        // 3. Włącz stół ponownie przez MinigameManager
-        if (MinigameManager.Instance != null)
-            MinigameManager.Instance.OnPaintingFinished(this);
+        // stół wraca
+        gameObject.SetActive(true);
     }
 }
+
+

@@ -1,7 +1,8 @@
-﻿using UnityEngine;
-using TMPro;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using static ResourcesTypes;
 
 public class MaskPaintingMinigame : MonoBehaviour
 {
@@ -15,24 +16,22 @@ public class MaskPaintingMinigame : MonoBehaviour
     public float manualRotationSpeed = 50f;
 
     private bool isInitialized = false;
-    private Color flowerColor = Color.green;
+    private FlowerType usedFlower;
 
-    public Action OnMinigameEnd; // callback dla PaintingTable
+    public Action OnMinigameEnd;
 
-    // ================= INIT =================
     public void SetResource(string flower)
     {
-        switch (flower)
-        {
-            case "Roza": flowerColor = Color.red; break;
-            case "Fiolka": flowerColor = Color.magenta; break;
-            case "Slonecznik": flowerColor = Color.yellow; break;
-        }
-
         foreach (var p in points)
+            p.SetFlowerColor(flower);
+
+        usedFlower = flower switch
         {
-            p.paintColor = flowerColor;
-        }
+            "poppy" => FlowerType.Poppy,
+            "violet" => FlowerType.Violet,
+            "chrysanthemum" => FlowerType.Chrysanthemum,
+            _ => FlowerType.Poppy
+        };
     }
 
     public void InitializeMinigame()
@@ -86,8 +85,25 @@ public class MaskPaintingMinigame : MonoBehaviour
             if (!p.isPainted) return;
 
         isInitialized = false;
+
+        // zapisujemy użyty flower
+        MinigameManager.Instance.usedFlower = usedFlower;
+
         OnMinigameEnd?.Invoke();
     }
+    public void ResetState()
+    {
+        isInitialized = false;
+
+        foreach (var p in points)
+            p.ResetPoint();
+
+        if (maskModel != null)
+            maskModel.rotation = Quaternion.identity;
+
+        UpdateProgressText();
+    }
+
 
     void UpdateProgressText()
     {

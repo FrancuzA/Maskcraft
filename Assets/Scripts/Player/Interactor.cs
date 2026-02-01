@@ -21,7 +21,7 @@ public class Interactor : MonoBehaviour
             lastRotation = transform.rotation;
         }
 
-        if (Input.GetKey(KeyCode.Mouse0) && interactableInRange)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && interactableInRange)
         {
             if(interactable != null)
                 interactable.Interact();
