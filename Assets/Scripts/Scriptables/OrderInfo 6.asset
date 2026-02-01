@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e723b6a8258934541a8650af84102a96, type: 3}
+  m_Name: OrderInfo 6
+  m_EditorClassIdentifier: 
+  Message: "Cze\u015B\u0107\u2026 wi\u0119c\u2026 pr\xF3buj\u0119\u2026 aah\u2026
+    zasn\u0105\u0107 od d\u0142u\u017Cszego czasu\u2026 Ale co\u015B mi ci\u0105gle
+    przeszkadza\u2026 um\u2026 co ja mia\u0142em powiedzie\u0107? A, tak\u2026 Potrzebuj\u0119
+    maski. Maski, kt\xF3ra pozwoli mi zasn\u0105\u0107\u2026 ale nie pozwoli nikomu
+    innemu. Niech m\xF3j sen o\u015Blepi ich \u015Blepia\u2026 ale niech tak\u017Ce
+    mnie uspokaja, \u017Cebym mog\u0142 porz\u0105dnie odpocz\u0105\u0107\u2026 ahem\u2026
+    i zr\xF3b j\u0105 ci\u0119\u017Ck\u0105, \u017Ceby nikt nie m\xF3g\u0142 jej
+    mi zdj\u0105\u0107. Dzi\u0119ki\u2026"
+  woodType: 0
+  metalType: 1
+  flowerType: 1
