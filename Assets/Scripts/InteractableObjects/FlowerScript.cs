@@ -16,6 +16,7 @@ public class FlowerScript : MonoBehaviour, IInteractable
     {
         currentHP = flowerHP;
         Debug.Log($"🌼 {flowerType} created at {transform.position}");
+        musicManager = Dependencies.Instance.GetDependancy<Musicmanager>();
     }
 
     public void Interact()

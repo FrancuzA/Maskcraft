@@ -19,6 +19,7 @@ public class OreScript : MonoBehaviour, IInteractable
 
     private void Start()
     {
+        musicManager = Dependencies.Instance.GetDependancy<Musicmanager>();
         currentHP = oreHP;
     }
 
