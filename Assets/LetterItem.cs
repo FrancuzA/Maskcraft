@@ -2,9 +2,8 @@
 
 public class LetterItem : MonoBehaviour, IInteractable
 {
-    [Header("Letter Settings")]
-    [SerializeField] private GameObject letterVisual;
-    
+    [Header("Settings")]
+    [SerializeField] private float pickupRange = 3f;
 
     private bool isCollected = false;
     private Collider letterCollider;
@@ -18,83 +17,64 @@ public class LetterItem : MonoBehaviour, IInteractable
             (letterCollider as BoxCollider).isTrigger = true;
         }
 
-        // Add a simple visual if none exists
-        if (letterVisual == null)
-        {
-            CreateDefaultVisual();
-        }
-
         Debug.Log("📮 Letter spawned at " + transform.position);
     }
 
-    void CreateDefaultVisual()
+    void Update()
     {
-        // Create a simple envelope visual
-        GameObject envelope = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        envelope.transform.SetParent(transform);
-        envelope.transform.localPosition = Vector3.zero;
-        envelope.transform.localScale = new Vector3(0.3f, 0.02f, 0.2f);
+        // Optional: Float animation or glow effect
+        FloatAnimation();
+    }
 
-        
+    void FloatAnimation()
+    {
+        // Simple floating animation
+        float floatHeight = Mathf.Sin(Time.time * 2f) * 0.1f;
+        transform.position += new Vector3(0, floatHeight * Time.deltaTime, 0);
     }
 
     public void Interact()
     {
         if (isCollected) return;
-
         CollectLetter();
-    }
-
-    void CollectLetter()
-    {
-        isCollected = true;
-
-        Debug.Log("📬 Letter collected!");
-
-        // Show the letter UI
-        if (OrderLetterUI.Instance != null)
-        {
-            OrderLetterUI.Instance.ShowLetter();
-        }
-
-       
-
-        // Destroy the physical letter
-        Destroy(gameObject);
     }
 
     void OnTriggerEnter(Collider other)
     {
-        // Optional: Auto-collect when player walks over it
+        // Auto-collect when player walks over it
         if (other.CompareTag("Player") && !isCollected)
         {
             CollectLetter();
         }
     }
 
-    // Visual feedback when player looks at it
+    void CollectLetter()
+    {
+        isCollected = true;
+
+        // 1. Tell OrderLetterUI that player now has a letter
+        OrderLetterUI.Instance.SetHasLetter(true);
+
+        // 2. Make sure OrderSystem has an active order
+        if (!OrderSystem.Instance.hasActiveOrder)
+        {
+            Debug.LogError("❌ Letter collected but no active order in OrderSystem!");
+        }
+
+        Debug.Log("📬 Letter collected! Press TAB to read.");
+
+        // 3. Destroy the physical letter
+        Destroy(gameObject);
+    }
+
+    // Visual feedback
     void OnMouseEnter()
     {
-        if (letterVisual != null)
-        {
-            // Highlight effect
-            Renderer rend = letterVisual.GetComponent<Renderer>();
-            if (rend != null)
-            {
-                rend.material.color = Color.yellow;
-            }
-        }
+        // Optional: Highlight effect
     }
 
     void OnMouseExit()
     {
-        if (letterVisual != null)
-        {
-            Renderer rend = letterVisual.GetComponent<Renderer>();
-            if (rend != null)
-            {
-                rend.material.color = new Color(0.95f, 0.95f, 0.85f);
-            }
-        }
+        // Optional: Remove highlight
     }
 }

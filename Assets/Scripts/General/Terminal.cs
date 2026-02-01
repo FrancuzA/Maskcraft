@@ -3,14 +3,11 @@
 public class Terminal : MonoBehaviour, IInteractable
 {
     public int rewardGold = 10;
+    private BirdController birdController;
 
     void Start()
     {
-        // Make sure OrderSystem exists
-        if (OrderSystem.Instance == null)
-        {
-            Debug.LogError("❌ OrderSystem not found!");
-        }
+        birdController = FindObjectOfType<BirdController>();
     }
 
     public void Interact()
@@ -26,7 +23,7 @@ public class Terminal : MonoBehaviour, IInteractable
 
             if (success)
             {
-                Debug.Log("✅ SUCCESS +10 gold");
+                Debug.Log($"✅ SUCCESS +{rewardGold} gold");
                 Inventory.instance.AddGold(rewardGold);
             }
             else
@@ -37,20 +34,31 @@ public class Terminal : MonoBehaviour, IInteractable
             // Reset everything
             MinigameManager.Instance.ResetLoop();
             OrderSystem.Instance.ClearOrder();
+
+            // Remove current letter from player
+            if (OrderLetterUI.Instance != null)
+            {
+                OrderLetterUI.Instance.SetHasLetter(false);
+                Debug.Log("🗑️ Old letter removed from player");
+            }
+
+            // Notify bird controller to deliver next order
+            if (birdController != null)
+            {
+                birdController.DeliverNextOrder();
+            }
         }
         else if (OrderSystem.Instance.hasActiveOrder)
         {
-            // Show current order letter
-            Debug.Log("📄 Showing current order");
-            OrderLetterUI.Instance.ShowLetter();
+            // Player wants to read current letter
+            if (OrderLetterUI.Instance != null)
+            {
+                OrderLetterUI.Instance.ShowLetter();
+            }
         }
         else
         {
-            // No active order - tell player to wait for owl
-            Debug.Log("📭 No active order. Wait for the owl delivery!");
-
-            // Optional: Show message UI
-            // MessageUI.Instance.ShowMessage("Wait for the owl to deliver your next order!");
+            Debug.Log("📭 No active order. Wait for owl!");
         }
     }
 }

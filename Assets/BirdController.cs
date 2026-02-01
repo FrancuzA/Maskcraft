@@ -1,165 +1,100 @@
 ﻿using System.Collections;
 using UnityEngine;
+using FMODUnity;
 
 public class BirdController : MonoBehaviour
 {
-    [Header("Owl Settings")]
-    [SerializeField] private GameObject owlPrefab;
-    [SerializeField] private Transform[] spawnPoints; // Points where owl appears from horizon
-    [SerializeField] private Transform[] dropPoints; // Points where letters are dropped
-    [SerializeField] private float flightSpeed = 10f;
-    [SerializeField] private float hoverHeight = 30f;
-    [SerializeField] private float deliveryInterval = 60f; // Time between deliveries in seconds
+    [Header("Animation")]
+    [SerializeField] private Animator owlAnimator;
+    [SerializeField] private string deliveryAnimationName = "OwlDelivery";
 
-    [Header("Letter Settings")]
+    [Header("Delivery Settings")]
+    [SerializeField] private Transform[] dropPoints;
     [SerializeField] private GameObject letterPrefab;
-    [SerializeField] private float letterFallSpeed = 5f;
+    [SerializeField] private float letterDropTime = 2.5f; // When in animation to drop letter
+    [SerializeField] private EventReference scream;
 
-    private bool isDelivering = false;
-    private GameObject currentOwl;
     private OrderSystem orderSystem;
+    private bool isDelivering = false;
+    private Vector3 currentDropPoint;
+    private Musicmanager musicManager;
 
     void Start()
     {
+        musicManager = Dependencies.Instance.GetDependancy<Musicmanager>();
         orderSystem = OrderSystem.Instance;
 
-        if (orderSystem == null)
+        if (owlAnimator == null)
+            owlAnimator = GetComponent<Animator>();
+
+        Debug.Log("🦉 Owl Animation Controller ready");
+
+        // Deliver first order at start
+        if (orderSystem != null && !orderSystem.hasActiveOrder)
         {
-            Debug.LogError("❌ OrderSystem not found!");
-            return;
+            DeliverFirstOrder();
         }
-
-        // Start periodic deliveries
-        StartCoroutine(DeliveryRoutine());
-
-        Debug.Log("🦉 Owl Delivery System initialized");
     }
 
-    IEnumerator DeliveryRoutine()
+    void DeliverFirstOrder()
     {
-        while (true)
-        {
-            yield return new WaitForSeconds(deliveryInterval);
+        StartCoroutine(DeliverAfterDelay(3f));
+    }
 
-            // Only deliver if there's no active order
-            if (!orderSystem.hasActiveOrder && !isDelivering)
-            {
-                StartDelivery();
-            }
-        }
+    System.Collections.IEnumerator DeliverAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        StartDelivery();
     }
 
     public void StartDelivery()
     {
-        if (isDelivering) return;
+        musicManager.PlaySound(scream);
+        if (isDelivering || orderSystem.hasActiveOrder) return;
 
-        StartCoroutine(DeliveryProcess());
-    }
+        Debug.Log("🦉 Starting owl delivery animation");
 
-    IEnumerator DeliveryProcess()
-    {
-        isDelivering = true;
-
-        // 1. Generate a new order
+        // Generate order first
         orderSystem.GenerateOrder();
 
-        // 2. Spawn owl at random spawn point
-        Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-        Transform dropPoint = dropPoints[Random.Range(0, dropPoints.Length)];
-
-        currentOwl = Instantiate(owlPrefab, spawnPoint.position, Quaternion.identity);
-
-        // 3. Owl flies to drop point
-        yield return StartCoroutine(FlyToDropPoint(dropPoint.position));
-
-        // 4. Drop letter
-        yield return StartCoroutine(DropLetter(dropPoint.position));
-
-        // 5. Owl flies away
-        yield return StartCoroutine(FlyAway());
-
-        isDelivering = false;
-
-        Debug.Log("📬 Letter delivered!");
-    }
-
-    IEnumerator FlyToDropPoint(Vector3 targetPosition)
-    {
-        Vector3 startPos = currentOwl.transform.position;
-        Vector3 flyTarget = targetPosition + Vector3.up * hoverHeight;
-
-        float distance = Vector3.Distance(startPos, flyTarget);
-        float duration = distance / flightSpeed;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
+        // Pick random drop point
+        if (dropPoints.Length > 0)
         {
-            elapsed += Time.deltaTime;
-            float t = elapsed / duration;
-
-            currentOwl.transform.position = Vector3.Lerp(startPos, flyTarget, t);
-
-            // Make owl look at target
-            Vector3 direction = (flyTarget - currentOwl.transform.position).normalized;
-            if (direction != Vector3.zero)
-            {
-                currentOwl.transform.rotation = Quaternion.LookRotation(direction);
-            }
-
-            yield return null;
+            currentDropPoint = dropPoints[Random.Range(0, dropPoints.Length)].position;
+            transform.position = currentDropPoint + new Vector3(-50, 30, 0); // Start position
+            transform.LookAt(currentDropPoint);
         }
 
-        // Hover briefly
-        yield return new WaitForSeconds(1f);
+        // Start animation
+        owlAnimator.Play(deliveryAnimationName);
+        isDelivering = true;
+
+        // Schedule letter drop during animation
+        Invoke("DropLetter", letterDropTime);
     }
 
-    IEnumerator DropLetter(Vector3 dropPosition)
+    void DropLetter()
     {
-        // Instantiate letter at owl's position
-        GameObject letter = Instantiate(letterPrefab, currentOwl.transform.position, Quaternion.identity);
+        Debug.Log("📨 Dropping letter during animation");
 
-        // Add LetterItem component to the letter
-        LetterItem letterItem = letter.AddComponent<LetterItem>();
+        // Spawn letter
+        GameObject letter = Instantiate(letterPrefab, transform.position - Vector3.up * 2, Quaternion.identity);
+
+        // Add LetterItem component if missing
+        if (letter.GetComponent<LetterItem>() == null)
+        {
+            letter.AddComponent<LetterItem>();
+        }
 
         // Make letter fall to ground
-        float elapsed = 0f;
-        Vector3 startPos = letter.transform.position;
-        Vector3 groundPos = GetGroundPosition(dropPosition);
-
-        while (elapsed < 2f) // Fall for max 2 seconds
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / 2f;
-
-            // Parabolic fall curve
-            Vector3 currentPos = Vector3.Lerp(startPos, groundPos, t);
-            currentPos.y += Mathf.Sin(t * Mathf.PI) * 5f; // Arc effect
-
-            letter.transform.position = currentPos;
-
-            // Rotate letter as it falls
-            letter.transform.Rotate(Vector3.right * 180f * Time.deltaTime);
-
-            // Check if reached ground
-            if (Vector3.Distance(letter.transform.position, groundPos) < 0.5f)
-                break;
-
-            yield return null;
-        }
-
-        // Ensure letter is on ground
-        letter.transform.position = groundPos;
-        letter.transform.rotation = Quaternion.Euler(0, Random.Range(0, 360), 90); // Lay flat on ground
-
-        // Play landing sound/effect here if needed
+        StartCoroutine(DropLetterToGround(letter, currentDropPoint));
     }
 
-    IEnumerator FlyAway()
+        public  System.Collections.IEnumerator DropLetterToGround(GameObject letter, Vector3 targetPos)
     {
-        Vector3 startPos = currentOwl.transform.position;
-        Vector3 endPos = startPos + (currentOwl.transform.forward * 100f) + (Vector3.up * 50f);
-
-        float duration = 3f;
+        Vector3 startPos = letter.transform.position;
+        Vector3 groundPos = GetGroundPosition(targetPos);
+        float duration = 1.5f;
         float elapsed = 0f;
 
         while (elapsed < duration)
@@ -167,56 +102,52 @@ public class BirdController : MonoBehaviour
             elapsed += Time.deltaTime;
             float t = elapsed / duration;
 
-            currentOwl.transform.position = Vector3.Lerp(startPos, endPos, t);
+            // Arc motion
+            Vector3 currentPos = Vector3.Lerp(startPos, groundPos, t);
+            currentPos.y += Mathf.Sin(t * Mathf.PI) * 3f;
+
+            letter.transform.position = currentPos;
+            letter.transform.Rotate(Vector3.right * 90f * Time.deltaTime);
+
             yield return null;
         }
 
-        Destroy(currentOwl);
+        // Final position
+        letter.transform.position = groundPos;
+        letter.transform.rotation = Quaternion.Euler(0, Random.Range(0, 360), 90);
+
+        Debug.Log($"📨 Letter landed at {groundPos}");
+    }
+
+    // Animation Event - Called at the end of delivery animation
+    public void OnDeliveryComplete()
+    {
+        isDelivering = false;
+        Debug.Log("✅ Owl delivery animation complete");
     }
 
     Vector3 GetGroundPosition(Vector3 position)
     {
         RaycastHit hit;
-        if (Physics.Raycast(position + Vector3.up * 50f, Vector3.down, out hit, 100f))
+        if (Physics.Raycast(position + Vector3.up * 20f, Vector3.down, out hit, 50f))
         {
-            return hit.point + Vector3.up * 0.1f; // Slightly above ground
+            return hit.point + Vector3.up * 0.1f;
         }
-
         return position;
     }
 
-    // Call this to immediately trigger a delivery (for testing)
-    [ContextMenu("Test Delivery")]
+    // Called by Terminal when order is completed
+    public void DeliverNextOrder()
+    {
+        if (!isDelivering && !orderSystem.hasActiveOrder)
+        {
+            StartCoroutine(DeliverAfterDelay(5f)); // 5 second delay
+        }
+    }
+
+    [ContextMenu("Test Delivery Now")]
     public void TestDelivery()
     {
         StartDelivery();
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        if (spawnPoints != null)
-        {
-            Gizmos.color = Color.blue;
-            foreach (Transform point in spawnPoints)
-            {
-                if (point != null)
-                {
-                    Gizmos.DrawSphere(point.position, 1f);
-                    Gizmos.DrawLine(point.position, point.position + point.forward * 5f);
-                }
-            }
-        }
-
-        if (dropPoints != null)
-        {
-            Gizmos.color = Color.green;
-            foreach (Transform point in dropPoints)
-            {
-                if (point != null)
-                {
-                    Gizmos.DrawCube(point.position, Vector3.one * 0.5f);
-                }
-            }
-        }
     }
 }
