@@ -5,7 +5,11 @@ public class CarvingStation : MonoBehaviour, IInteractable
     [Header("Setup")]
     public string promptText = "Carve Mask [E]"; // Optional: show UI prompt
     private bool playerInRange = false;
-
+    private MinigameManager minigameManager;
+    private void Start()
+    {
+        minigameManager = Dependencies.Instance.GetDependancy<MinigameManager>();
+    }
     void Update()
     {
         // Optional: show/hide interaction prompt UI
@@ -17,14 +21,7 @@ public class CarvingStation : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        if (MinigameManager.Instance == null)
-        {
-            Debug.LogError("❌ MinigameManager not found!");
-            return;
-        }
-
-        Debug.Log($"✅ Interacted with {gameObject.name} → Starting Carving Minigame");
-        MinigameManager.Instance.EnterMinigame("Carving"); // <-- dodany argument
+        minigameManager.EnterMinigame("Carving"); // <-- dodany argument
     }
 
 

@@ -18,7 +18,7 @@ public class CarvingMinigame : MonoBehaviour
     public TMP_Text similarityText;
 
     [Header("Gameplay")]
-    [Range(10, 50)] public float brushSize = 25f;
+    [Range(1, 50)] public float brushSize = 25f;
     [Range(0.3f, 0.8f)] public float winThreshold = 0.5f;
 
     private Texture2D drawTexture;
@@ -28,7 +28,11 @@ public class CarvingMinigame : MonoBehaviour
     private bool isInitialized = false;
     private Texture2D maskReference;
     private WoodType currentWood;
-
+    private MinigameManager minigameManager;
+    private void Start()
+    {
+        minigameManager=Dependencies.Instance.GetDependancy<MinigameManager>();
+    }
     public void SetResource(string resource)
     {
         switch (resource)
@@ -132,7 +136,7 @@ public class CarvingMinigame : MonoBehaviour
         similarityText.text = "✅ COMPLETE";
 
         // zapisujemy użyty wood do MinigameManager
-        MinigameManager.Instance.usedWood = currentWood;
+        minigameManager.usedWood = currentWood;
 
         Invoke(nameof(ExitMinigame), 1.5f);
     }
@@ -141,7 +145,7 @@ public class CarvingMinigame : MonoBehaviour
 
     void ExitMinigame()
     {
-        MinigameManager.Instance.ExitMinigame();
+        minigameManager.ExitMinigame();
     }
 
     void ClearTexture(Texture2D tex, Color color)

@@ -2,37 +2,64 @@
 
 public class PaintingTable : MonoBehaviour, IInteractable
 {
-    public GameObject maskPrefab;
+    public GameObject acaciaMaskPrefab;
+    public GameObject acaciaMaskPrefab2;
+    public GameObject willowMaskPrefab;
+    public GameObject willowMaskPrefab2;
+    public GameObject palmMaskPrefab;
+    public GameObject palmMaskPrefab2;
+    public GameObject maskprefab;
+    public GameObject completeMask;
     public float maskDistanceFromCamera = 1f;
+    public Transform maskSpawnPoint;
+    public GameObject paintingCanvas;
 
+    private MinigameManager minigameManager;
     private GameObject currentMaskInstance;
-
+    private void Start()
+    {
+        minigameManager= Dependencies.Instance.GetDependancy<MinigameManager>();
+    }
     public void Interact()
     {
-        if (MinigameManager.Instance == null) return;
-        if (MinigameManager.Instance.IsMinigameActive()) return;
-
-        if (MinigameManager.Instance.CurrentStep < 2)
+        
+        if (minigameManager.CurrentStep < 2)
         {
             Debug.LogWarning("Musisz najpierw ukończyć Carving i Metal Pour!");
             return;
         }
 
-        if (!MinigameManager.Instance.HasRequiredResource("MaskPainting"))
+        if (!minigameManager.HasRequiredResource("MaskPainting"))
         {
             Debug.LogWarning("Nie masz żadnego kwiatka w ekwipunku!");
             return;
         }
+        
+        string flower = minigameManager.GetResourceForMinigame("MaskPainting");
+        switch(minigameManager.usedWood)
+        {
+            case WoodType.Acacia: maskprefab = acaciaMaskPrefab;
+                                  completeMask = acaciaMaskPrefab2;
+                break;
 
-        string flower = MinigameManager.Instance.GetResourceForMinigame("MaskPainting");
+            case WoodType.Willow: maskprefab = willowMaskPrefab;
+                                   completeMask = willowMaskPrefab2;
+                break;
+            case WoodType.Palm: maskprefab = palmMaskPrefab;
+                                completeMask = palmMaskPrefab2; 
+                break;
+            default: maskprefab = willowMaskPrefab;
+                    completeMask = willowMaskPrefab2;
+                break;
 
+        }
         Camera cam = Camera.main;
         Vector3 pos = cam.transform.position + cam.transform.forward * maskDistanceFromCamera;
         Quaternion rot = Quaternion.LookRotation(cam.transform.forward);
 
-        currentMaskInstance = Instantiate(maskPrefab, pos, rot);
+        currentMaskInstance = Instantiate(maskprefab, pos, rot);
 
-        MaskPaintingMinigame minigame = MinigameManager.Instance.maskPaintingMinigame;
+        MaskPaintingMinigame minigame = minigameManager.maskPaintingMinigame;
         minigame.maskModel = currentMaskInstance.transform;
 
         minigame.points.Clear();
@@ -43,17 +70,17 @@ public class PaintingTable : MonoBehaviour, IInteractable
 
         minigame.OnMinigameEnd = OnMinigameEnd;
 
-        MinigameManager.Instance.EnterMinigame("MaskPainting");
+        minigameManager.EnterMinigame("MaskPainting");
         minigame.InitializeMinigame();
-
+        paintingCanvas.SetActive(true);
         gameObject.SetActive(false);
     }
 
     void OnMinigameEnd()
     {
         // kończymy minigrę (to wywoła też reset loopa)
-        MinigameManager.Instance.ExitMinigame();
-
+        minigameManager.ExitMinigame();
+        Instantiate(completeMask, maskSpawnPoint.position, maskSpawnPoint.rotation);
         if (currentMaskInstance != null)
             Destroy(currentMaskInstance);
 
@@ -61,6 +88,7 @@ public class PaintingTable : MonoBehaviour, IInteractable
 
         // stół wraca
         gameObject.SetActive(true);
+        paintingCanvas.SetActive(false);
     }
 }
 
