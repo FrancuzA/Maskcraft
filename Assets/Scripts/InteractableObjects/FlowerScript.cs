@@ -43,21 +43,7 @@ public class FlowerScript : MonoBehaviour, IInteractable
         // 1. Add resources to inventory BEFORE destroying
         AddToInventory();
 
-        // 2. Get the spawner and respawn a new flower
-        var spawner = Dependencies.Instance?.GetDependancy<FlowerSpawner>();
-        if (spawner != null)
-        {
-            Debug.Log($"🔄 Telling spawner to respawn {flowerType}");
-            spawner.AddFlowerToSpawn(flowerType);
-        }
-        else
-        {
-            Debug.LogError("❌ FlowerSpawner not found in Dependencies!");
-        }
-
-        // 3. Destroy this flower
-        Debug.Log($"🔥 Destroying flower object");
-        Destroy(gameObject);
+      
     }
 
     void AddToInventory()

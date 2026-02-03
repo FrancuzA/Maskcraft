@@ -166,7 +166,7 @@ MonoBehaviour:
   distToGround: 1
   WalkAnim: {fileID: 6970907246967806484}
   cameraTransform: {fileID: 4650200537940635940}
-  mouseSensitivity: 7
+  mouseSensitivity: 500
   axePref: {fileID: 7995761616893156146}
   pickaxePref: {fileID: 3768244619854026326}
   currentItem: 
